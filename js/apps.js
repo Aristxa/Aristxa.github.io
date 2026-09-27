@@ -5,12 +5,10 @@
   'use strict';
 
   // ---------- Icons ----------
-  // PNGs are Microsoft Fluent Emoji (MIT); terminal + github are hand-drawn SVGs.
-  const SVG_ICONS = new Set(['terminal', 'github']);
+  // Tiles are original; glyphs are Microsoft Fluent UI System Icons (MIT). See assets/ICONS-LICENSE.txt.
   const Icons = {
     html(key, size = 40) {
-      const src = `assets/icons/${key}.${SVG_ICONS.has(key) ? 'svg' : 'png'}`;
-      return `<img class="ico" src="${src}" width="${size}" height="${size}" alt="" draggable="false" />`;
+      return `<img class="ico" src="assets/icons/${key}.svg?v=4" width="${size}" height="${size}" alt="" draggable="false" />`;
     },
   };
 

@@ -1,3 +1,6 @@
-PNG icons in assets/icons/ (except terminal.svg and github.svg) are from
-Microsoft Fluent Emoji (https://github.com/microsoft/fluentui-emoji), MIT License,
-Copyright (c) Microsoft Corporation. Resized to 96x96.
+Glyphs inside the app icons come from Microsoft Fluent UI System Icons
+(https://github.com/microsoft/fluentui-system-icons), MIT License,
+Copyright (c) 2020 Microsoft Corporation. Tiles and colours are original.
+
+The GitHub mark and Hugging Face logo are trademarks of their owners and
+are used only to link to those profiles.

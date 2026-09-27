@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffcd5c"/><stop offset="1" stop-color="#f0a431"/></linearGradient>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#000" flood-opacity=".22"/></filter>
+  </defs>
+  <rect x="4" y="4" width="88" height="88" rx="21" fill="url(#bg)"/>
+  <rect x="4.5" y="4.5" width="87" height="87" rx="20.5" fill="none" stroke="#fff" stroke-opacity=".28"/>
+  <rect x="4" y="4" width="88" height="88" rx="21" fill="none" stroke="#000" stroke-opacity=".12"/>
+  <g transform="translate(20 20) scale(2.3333)" fill="#ffffff" filter="url(#sh)"><path d="M2 8V6.25C2 4.45507 3.45507 3 5.25 3H8.12868C8.72542 3 9.29771 3.23705 9.71967 3.65901L11.25 5.18934L8.65901 7.78033C8.51836 7.92098 8.32759 8 8.12868 8H2ZM2 9.5V17.75C2 19.5449 3.45507 21 5.25 21H18.75C20.5449 21 22 19.5449 22 17.75V8.75C22 6.95507 20.5449 5.5 18.75 5.5H13.0607L9.71967 8.84099C9.29771 9.26295 8.72542 9.5 8.12868 9.5H2Z" fill="#ffffff"/></g>
+</svg>
