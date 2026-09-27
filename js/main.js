@@ -88,7 +88,7 @@
   window.OS = OS;
 
   // ---------- desktop icons ----------
-  const DESKTOP = ['about', 'projects', 'coolcity', 'fiskal', 'finscope', 'ndea', 'speakup', 'terminal', 'music', 'github', 'hf', 'contact', 'trash'];
+  const DESKTOP = ['about', 'projects', 'coolcity', 'fiskal', 'finscope', 'ndea', 'speakup', 'kupon', 'terminal', 'music', 'github', 'hf', 'contact', 'trash'];
   const iconsEl = $('#icons');
   iconsEl.innerHTML = DESKTOP.map(id => {
     const a = Apps.get(id);
