@@ -5,10 +5,33 @@
   'use strict';
 
   // ---------- Icons ----------
-  // Tiles are original; glyphs are Microsoft Fluent UI System Icons (MIT). See assets/ICONS-LICENSE.txt.
+  // Animated line icons from itshover (https://itshover.com, Apache-2.0), converted from their
+  // React/motion components to plain SVG. The hover animations live in css/style.css (".ih-*").
+  // vb = viewBox size; stroke width is scaled from 24 so all icons look equally heavy.
+  const FILE = '<path class="ih-draw a-fold" pathLength="1" d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><path class="ih-draw a-line" pathLength="1" d="M9 17h6"/><path class="ih-draw a-line" pathLength="1" d="M9 13h6"/>';
+  const SVGS = {
+    about: { vb: 24, g: FILE },
+    file: { vb: 24, g: FILE },
+    projects: { vb: 24, g: '<path class="p-top" d="M12 6l-8 4l8 4l8 -4l-8 -4"/><path class="p-bot" d="M4 14l8 4l8 -4"/>' },
+    coolcity: { vb: 24, g: '<path class="c-dish" d="M4 10a7.31 7.31 0 0 0 10 10Z"/><path d="m9 15 3-3"/><path class="c-in" d="M17 13a6 6 0 0 0-6-6"/><path class="c-out" d="M21 13A10 10 0 0 0 11 3"/>' },
+    fiskal: { vb: 48, cap: 'square', g: '<path d="M24 40.5V41L24 10V10.5"/><path d="M24 41C31.0005 36.9995 37.9995 36.9995 45 41V10.0003C37.9995 5.99989 31.0005 5.99989 24 10.0003C16.9995 5.99989 10.0005 5.99989 3 10.0003V41C10.0005 36.9995 16.9995 36.9995 24 41Z"/><path class="ih-draw b-1" pathLength="1" d="M30 16.5C32.8362 15.1345 36.5662 15.06 39.5 16.2763"/><path class="ih-draw b-2" pathLength="1" d="M30 23.5832C32.8362 22.2178 36.5662 22.1432 39.5 23.3596"/><path class="ih-draw b-3" pathLength="1" d="M30 30.6665C32.8362 29.301 36.5662 29.2265 39.5 30.4428"/>' },
+    finscope: { vb: 24, g: '<path class="f-base" d="M4 19l16 0"/><path class="ih-draw f-line" pathLength="1" d="M4 15l4 -6l4 2l4 -5l4 4"/>' },
+    ndea: { vb: 24, g: '<path class="n-b1" d="M3 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path class="n-b2" d="M9 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path class="n-b3" d="M15 9a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path class="n-base" d="M4 20h14"/>' },
+    speakup: { vb: 24, g: '<path class="ih-draw m-path" pathLength="1" d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/>' },
+    kupon: { vb: 32, cap: 'square', g: '<rect class="q-scan" x="2" y="0" width="28" height="2" fill="currentColor" stroke="none"/><rect class="ih-draw q-c q-c1" pathLength="1" x="3" y="3" width="9" height="9"/><rect class="ih-draw q-c q-c2" pathLength="1" x="3" y="20" width="9" height="9"/><rect class="ih-draw q-c q-c3" pathLength="1" x="20" y="3" width="9" height="9"/><g class="q-in"><rect x="27" y="20" width="2" height="2"/><rect x="16" y="27" width="2" height="2"/><path d="M3 16H7"/><path d="M13 16H18M22 16V23H29M22 16H26M22 16H18M18 16V20H16"/><path d="M16 7V10"/><path d="M16 25V29H23V27"/><path d="M29.01 29H29"/></g><rect class="q-dot" x="24" y="7" width="1" height="1"/><rect class="q-dot" x="7" y="7" width="1" height="1"/><rect class="q-dot" x="7" y="24" width="1" height="1"/>' },
+    terminal: { vb: 24, g: '<path class="t-chev" d="M5 7l5 5l-5 5"/><path class="t-cur" d="M12 19l7 0"/>' },
+    music: { vb: 24, g: '<path class="v-disc" d="M16 3.937a9 9 0 1 0 5 8.063"/><path class="v-dot" d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M20 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M20 4l-3.5 10l-2.5 2"/>' },
+    github: { vb: 24, g: '<g class="g-cat"><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"/></g>' },
+    hf: { vb: 24, g: '<path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M6 18a4 4 0 0 1-1.967-.516"/><path class="ih-draw h-c" pathLength="1" d="M9 13a4.5 4.5 0 0 0 3-4"/><path class="ih-draw h-c" pathLength="1" d="M12 13h4"/><path class="ih-draw h-c" pathLength="1" d="M12 18h6a2 2 0 0 1 2 2v1"/><path class="ih-draw h-c" pathLength="1" d="M12 8h8"/><path class="ih-draw h-c" pathLength="1" d="M16 8V5a2 2 0 0 1 2-2"/><circle class="h-t" cx="16" cy="13" r=".5"/><circle class="h-t" cx="18" cy="3" r=".5"/><circle class="h-t" cx="20" cy="21" r=".5"/><circle class="h-t" cx="20" cy="8" r=".5"/>' },
+    contact: { vb: 24, g: '<g class="s-plane"><path d="M10 14l11 -11"/><path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5"/></g>' },
+    trash: { vb: 24, g: '<path class="r-low" d="M4 7l16 0"/><path d="M10 11l0 6"/><path d="M14 11l0 6"/><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/><path class="r-up" d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>' },
+    settings: { vb: 32, cap: 'square', g: '<g class="k-rot"><circle class="k-mid" cx="16" cy="16" r="5"/><path d="m30,17.5v-3l-3.388-1.355c-.25-.933-.617-1.815-1.089-2.633l1.436-3.351-2.121-2.121-3.351,1.436c-.817-.472-1.7-.838-2.633-1.089l-1.355-3.388h-3l-1.355,3.388c-.933.25-1.815.617-2.633,1.089l-3.351-1.436-2.121,2.121 1.436,3.351c-.472.817-.838,1.7-1.089,2.633l-3.388,1.355v3l3.388,1.355c.25.933.617,1.815,1.089,2.633l-1.436,3.351 2.121,2.121 3.351-1.436c.817.472 1.7.838 2.633,1.089l1.355,3.388h3l1.355-3.388c.933-.25 1.815-.617 2.633-1.089l3.351,1.436 2.121-2.121-1.436-3.351c.472-.817.838-1.7 1.089-2.633l3.388-1.355Z"/></g>' },
+  };
   const Icons = {
     html(key, size = 40) {
-      return `<img class="ico" src="assets/icons/${key}.svg?v=9" width="${size}" height="${size}" alt="" draggable="false" />`;
+      const v = SVGS[key] || SVGS.file;
+      const sw = (1.6 * v.vb / 24).toFixed(2);
+      return `<svg class="ico ih ih-${key}" viewBox="0 0 ${v.vb} ${v.vb}" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="${v.cap || 'round'}" stroke-linejoin="round" stroke-miterlimit="10" aria-hidden="true">${v.g}</svg>`;
     },
   };
 

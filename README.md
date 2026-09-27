@@ -4,7 +4,7 @@ Portfolio of **Aristea Gjokthomi**, a data scientist and ML engineer, built as a
 
 **Live:** https://aristxa.github.io
 
-- The default **wallpaper is a WebGL spiral galaxy** (plain WebGL, no libraries) that turns slowly and tilts with the mouse.
+- The default **wallpaper is the daedalOS galaxy** (WebGL), which turns slowly and tilts with the mouse.
 - Switch it to a **live toy CoolCity heat map** (right-click the desktop or Settings): hover to cast shade, click to plant a tree, or run the lazy-greedy planner.
 - Drag on the desktop to **rubber-band select** icons, like a real PC.
 - There is **one app per project**, each with an interactive view of its real published results. The Hugging Face Spaces run live inside the windows.
@@ -16,14 +16,14 @@ Portfolio of **Aristea Gjokthomi**, a data scientist and ML engineer, built as a
 
 It's plain HTML, CSS and JavaScript with no framework, no build step and no web fonts (it uses the visitor's OS font).
 
-App icons are original tiles with glyphs from [Microsoft Fluent UI System Icons](https://github.com/microsoft/fluentui-system-icons) (MIT, see `assets/ICONS-LICENSE.txt`).
+The galaxy wallpaper is from [daedalOS](https://github.com/DustinBrett/daedalOS) (MIT) and the animated icons are adapted from [itshover](https://itshover.com) (Apache-2.0). See `THIRD-PARTY-NOTICES.md`.
 
 ## Structure
 
 ```
 index.html        shell markup (boot screen, desktop, taskbar, start menu)
 css/style.css     all styles and theme tokens
-js/galaxy.js      default wallpaper: WebGL spiral galaxy
+js/galaxy.js      default wallpaper: wrapper around js/vendor/daedalos-galaxy.js
 js/heat.js        optional wallpaper: heat-field simulation + greedy planner
 js/apps.js        icons, app registry and every app's content
 js/terminal.js    terminal commands
