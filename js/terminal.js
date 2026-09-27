@@ -39,6 +39,7 @@
     fiskal: 'Asistenti Fiskal: citation-bound RAG over Albanian tax law. 60-Q benchmark.',
     finscope: 'FinScope: SEC EDGAR → star schema → 5-model forecasting + anomaly detection.',
     ndea: 'Bank NDEA: Dynamic Network DEA of 9 Albanian banks, 2021–2023.',
+    speakup: 'Guxo: bilingual public-speaking practice app with live transcript and filler-word tracking.',
   };
 
   const COMMANDS = {

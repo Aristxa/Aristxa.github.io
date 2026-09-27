@@ -8,7 +8,7 @@
   // Tiles are original; glyphs are Microsoft Fluent UI System Icons (MIT). See assets/ICONS-LICENSE.txt.
   const Icons = {
     html(key, size = 40) {
-      return `<img class="ico" src="assets/icons/${key}.svg?v=5" width="${size}" height="${size}" alt="" draggable="false" />`;
+      return `<img class="ico" src="assets/icons/${key}.svg?v=6" width="${size}" height="${size}" alt="" draggable="false" />`;
     },
   };
 
@@ -43,7 +43,7 @@
     return { show };
   }
 
-  function live(el, url, { note, wake = true, title }) {
+  function live(el, url, { note, wake = true, title, allow = 'clipboard-write' }) {
     el.innerHTML = `
       <div class="live">
         <div class="live-bar"><span class="lock">🔒</span><span class="url mono">${esc(url.replace(/^https?:\/\//, ''))}</span><a class="mono" href="${url}" target="_blank" rel="noopener">open ↗</a></div>
@@ -56,12 +56,12 @@
       </div>`;
     const stage = el.querySelector('.live-stage');
     const go = () => {
-      stage.innerHTML = `<div class="live-loading mono"><span class="spinner"></span>connecting… free-tier Spaces can take a minute to wake</div>`;
+      stage.innerHTML = `<div class="live-loading mono"><span class="spinner"></span>${wake ? 'connecting… free-tier Spaces can take a minute to wake' : 'loading…'}</div>`;
       const f = document.createElement('iframe');
       f.src = url;
       f.title = title || 'Live app';
       f.loading = 'lazy';
-      f.allow = 'clipboard-write';
+      f.allow = allow;
       f.addEventListener('load', () => stage.querySelector('.live-loading')?.remove());
       stage.appendChild(f);
     };
@@ -94,6 +94,9 @@
       '',
       `- ${L('ndea', 'Bank NDEA')}`,
       '  How efficient are 9 Albanian banks? Done in R with network DEA.',
+      '',
+      `- ${L('speakup', 'Guxo')}`,
+      '  A bilingual (EN/SQ) app for practising public speaking. It listens, counts your filler words and tracks your nerves over time.',
       '',
       'The wallpaper is a toy version of CoolCity btw. Click it to plant trees.',
       '',
@@ -483,6 +486,39 @@
   }
 
   // ============================================================
+  // Guxo (Speak-UP)
+  // ============================================================
+  function mountSpeakUp(b) {
+    tabs(b, [
+      { id: 'o', label: 'Overview', render: el => {
+        el.innerHTML = `
+          <div class="case">
+            <h2 class="case-q">Guxo: practise public speaking until it stops being scary.</h2>
+            <p>A bilingual (English / Albanian) web app for people who are afraid of speaking in public. It gives you a prompt and a short time to prepare,
+            then you speak until the timer runs out. Your pace, filler words and nerves are tracked over time, so you can see the fear actually shrinking.</p>
+            <table class="facts"><tbody>
+              <tr><td class="n">4</td><td>practice modes: single word, question, debate (switch sides halfway), story from three random words</td></tr>
+              <tr><td class="n">130+</td><td>prompts in 11 topics, each in EN and SQ, plus a daily challenge</td></tr>
+              <tr><td class="n">30s → 5 min</td><td>"Courage Path": three full sessions unlock the next level</td></tr>
+              <tr><td class="n">0</td><td>bytes uploaded. Everything stays in the browser</td></tr>
+            </tbody></table>
+            <h4 class="mono">How it works</h4>
+            <ul class="bul">
+              <li><b>Live transcript</b> with the Web Speech API: words per minute, plus filler words detected per language (<i>um, like</i> / <i>ëë, domethënë, pra</i>) and highlighted.</li>
+              <li><b>Pause detection</b>: calibrates to room noise while you prepare, then measures your longest pause and how much of the time you were actually speaking.</li>
+              <li><b>A session built around nerves</b>: a 1–5 nervousness check-in, an optional 4-2-6 breathing warm-up, speech structures like PREP, gentle nudges after 4 s of silence, and a reflection at the end.</li>
+              <li><b>Progress</b>: streaks, total minutes, a before/after nervousness chart, 12 badges, audio or video recordings you can download, and JSON export.</li>
+            </ul>
+            <p class="built">Built with vanilla JavaScript, Web Audio API, Web Speech API, MediaRecorder and localStorage. No framework, no build step.</p>
+            <div class="row-links"><button class="btn-sm primary" data-go="l">Try it here →</button><a class="btn-sm" href="https://aristxa.github.io/Speak-UP/" target="_blank" rel="noopener">Open full screen ↗</a><a class="btn-sm" href="https://github.com/Aristxa/Speak-UP" target="_blank" rel="noopener">Source ↗</a></div>
+          </div>`;
+        el.querySelector('[data-go]').addEventListener('click', () => b.querySelector('[data-t=l]').click());
+      } },
+      { id: 'l', label: 'Live', flush: true, render: el => live(el, 'https://aristxa.github.io/Speak-UP/', { wake: false, title: 'Guxo', allow: 'microphone; camera; clipboard-write' }) },
+    ]);
+  }
+
+  // ============================================================
   // Explorer
   // ============================================================
   const FILES = [
@@ -490,6 +526,7 @@
     { f: 'flagship', icon: 'fiskal', name: 'Asistenti Fiskal', meta: 'Python · RAG · Gradio', open: 'fiskal' },
     { f: 'flagship', icon: 'finscope', name: 'FinScope', meta: 'Python · FastAPI · forecasting', open: 'finscope' },
     { f: 'flagship', icon: 'ndea', name: 'Bank Efficiency NDEA', meta: 'R · DEA · Quarto', open: 'ndea' },
+    { f: 'flagship', icon: 'speakup', name: 'Guxo · Speak Boldly', meta: 'JavaScript · Web Audio · Web Speech', open: 'speakup', url: 'https://github.com/Aristxa/Speak-UP' },
     { f: 'archive', icon: 'music', name: 'Music AI Generator', meta: 'TensorFlow · LSTM · Music21', desc: 'LSTM sequence model trained on the MAESTRO piano dataset. Generates 30–60 s melodies with MIDI export and a web player.', open: 'music', url: 'https://github.com/Aristxa/Music-AI-Generator' },
     { f: 'archive', icon: 'file', name: 'Hospital Management System', meta: 'PHP · MySQL', desc: 'Role-based web app for admins, doctors and patients: records, appointments, medical history and billing.', url: 'https://github.com/Aristxa/Hospital-Management-System' },
     { f: 'archive', icon: 'file', name: 'Movie Management System', meta: 'PHP · SQL', desc: 'Catalogue platform for admins, users and cinema managers over a centralised database.', url: 'https://github.com/Aristxa/Movies-Management-System' },
@@ -782,6 +819,7 @@
     { id: 'fiskal', title: 'Asistenti Fiskal', icon: 'fiskal', label: 'Asistenti Fiskal', w: 740, h: 660, mount: mountFiskal, desc: 'Citation-bound legal RAG' },
     { id: 'finscope', title: 'FinScope', icon: 'finscope', label: 'FinScope', w: 760, h: 640, mount: mountFinScope, desc: 'SEC EDGAR analytics platform' },
     { id: 'ndea', title: 'Bank Efficiency · NDEA', icon: 'ndea', label: 'Bank NDEA', w: 740, h: 620, mount: mountNDEA, desc: 'Dynamic Network DEA' },
+    { id: 'speakup', title: 'Guxo · Speak Boldly', icon: 'speakup', label: 'Guxo', w: 820, h: 660, mount: mountSpeakUp, desc: 'Public-speaking practice app' },
     { id: 'terminal', title: 'Terminal', icon: 'terminal', label: 'Terminal', w: 640, h: 420, mount: (b, w) => window.Terminal.mount(b, w), desc: 'Type help' },
     { id: 'music', title: 'melody.exe', icon: 'music', label: 'melody.exe', w: 620, h: 400, mount: mountMusic, desc: 'Generative music toy' },
     { id: 'github', title: 'GitHub · live', icon: 'github', label: 'GitHub', w: 620, h: 580, mount: mountGitHub, desc: 'Live repos from the API' },
