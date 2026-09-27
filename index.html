@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Aristea Gjokthomi · AristeaOS</title>
+  <meta name="description" content="Portfolio of Aristea Gjokthomi, data scientist and ML engineer in Tirana. Retrieval for Albanian law, satellite-driven urban cooling, financial forecasting and bank efficiency analysis, running as a desktop in your browser." />
+  <meta property="og:title" content="Aristea Gjokthomi · AristeaOS" />
+  <meta property="og:description" content="Data science and ML projects by Aristea Gjokthomi, running as a little desktop in your browser." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://aristxa.github.io/" />
+  <meta property="og:image" content="https://aristxa.github.io/assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="AristeaOS desktop with a Notepad window and a CoolCity chart" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://aristxa.github.io/assets/og.png" />
+  <link rel="canonical" href="https://aristxa.github.io/" />
+  <meta name="theme-color" content="#0b0c0f" />
+  <link rel="icon" href="assets/icons/coolcity.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script>
+    try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <!-- Plain-text summary for screen readers, crawlers and no-JS visitors -->
+  <div class="sr-only">
+    <h1>Aristea Gjokthomi, data scientist and ML engineer</h1>
+    <p>Tirana, Albania. MSc Information Systems in Economics, University of Tirana. Data scientist working on statistics and machine learning.</p>
+    <ul>
+      <li><a href="https://github.com/Aristxa/Cool-City">CoolCity Tirana</a>: satellite ML and a greedy planner for placing 1,000 trees; +37% cooling vs. the best simple rule.</li>
+      <li><a href="https://github.com/Aristxa/Asistenti-Fiskal">Asistenti Fiskal</a>: citation-bound retrieval-augmented QA over Albanian tax law, with a 60-question benchmark.</li>
+      <li><a href="https://github.com/Aristxa/FINSCOPE">FinScope</a>: SEC EDGAR ETL, star-schema warehouse, five-model forecasting and anomaly detection.</li>
+      <li><a href="https://aristxa.github.io/bank-efficiency-ndea/">Albanian bank efficiency</a>: Dynamic Network DEA of nine banks, 2021–2023.</li>
+    </ul>
+    <p><a href="https://github.com/Aristxa">GitHub</a> · <a href="https://huggingface.co/aristeaaa">Hugging Face</a></p>
+  </div>
+
+  <!-- Boot -->
+  <div id="boot" class="boot" aria-hidden="true">
+    <div class="boot-inner">
+      <div class="boot-logo"><i></i><i></i><i></i><i></i></div>
+      <div class="boot-log mono"></div>
+      <div class="boot-bar"><i></i></div>
+      <p class="boot-skip mono">press any key to skip</p>
+    </div>
+  </div>
+
+  <!-- Desktop -->
+  <main id="desktop" class="desktop">
+    <canvas id="wall" aria-hidden="true"></canvas>
+    <div class="wall-scrim"></div>
+
+    <div id="icons" class="icons" role="list" aria-label="Desktop"></div>
+
+    <aside class="widget mono" aria-label="CoolCity wallpaper model">
+      <div class="w-head">
+        <span>CoolCity · wallpaper</span>
+        <button id="w-info" class="w-info" aria-label="About this model">?</button>
+      </div>
+      <div class="w-grid">
+        <div><span class="k">mean surface</span><span class="v" id="w-mean">—</span></div>
+        <div><span class="k">hottest</span><span class="v" id="w-max">—</span></div>
+        <div><span class="k">trees</span><span class="v" id="w-trees">0</span></div>
+        <div><span class="k">cooled</span><span class="v cool" id="w-delta">0.00°C</span></div>
+      </div>
+      <div class="legend"><span>28°</span><i></i><span>48°C</span></div>
+      <p class="w-hint">Hover to cast shade · click the wallpaper to plant</p>
+      <div class="w-actions">
+        <button class="chip" id="w-run">▶ Greedy planner</button>
+        <button class="chip ghost" id="w-reset">Reset</button>
+      </div>
+    </aside>
+
+    <div id="windows" class="windows"></div>
+  </main>
+
+  <!-- Taskbar -->
+  <footer class="taskbar">
+    <button id="start-btn" class="start-btn" aria-label="Start" aria-haspopup="true" aria-expanded="false">
+      <span class="logo"><i></i><i></i><i></i><i></i></span>
+    </button>
+    <div id="tasks" class="tasks" aria-label="Open windows"></div>
+    <div class="tray">
+      <a class="tray-btn hide-sm" href="https://github.com/Aristxa" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d="M12 1.5C6.2 1.5 1.5 6.2 1.5 12c0 4.6 3 8.6 7.2 10 .5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.4-3.5-1.4-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.5 1.1 3.1.9.1-.7.4-1.1.7-1.4-2.3-.3-4.8-1.2-4.8-5.2 0-1.1.4-2.1 1.1-2.8-.1-.3-.5-1.3.1-2.8 0 0 .9-.3 2.9 1.1a10 10 0 0 1 5.3 0c2-1.4 2.9-1.1 2.9-1.1.6 1.5.2 2.5.1 2.8.7.7 1.1 1.7 1.1 2.8 0 4-2.5 4.9-4.8 5.2.4.3.7 1 .7 2v2.9c0 .3.2.6.7.5 4.2-1.4 7.2-5.4 7.2-10C22.5 6.2 17.8 1.5 12 1.5z"/></svg>
+      </a>
+      <button id="tray-theme" class="tray-btn" aria-label="Toggle theme">
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1Z"/></svg>
+      </button>
+      <div class="clock mono" title="Tirana time"><span id="clock-t">--:--</span><span id="clock-d" class="hide-sm"></span></div>
+      <button id="show-desktop" class="show-desktop" aria-label="Show desktop"></button>
+    </div>
+  </footer>
+
+  <!-- Start menu -->
+  <div id="start" class="start" hidden>
+    <div class="start-head">
+      <img class="avatar" src="assets/avatar.jpg" width="40" height="40" alt="" />
+      <div><b>Aristea Gjokthomi</b><span class="dim">Data scientist</span></div>
+    </div>
+    <label class="start-search">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="start-search" type="text" placeholder="Search apps and actions…" autocomplete="off" spellcheck="false" aria-label="Search" />
+      <kbd>Ctrl K</kbd>
+    </label>
+    <ul id="start-results" class="start-results" role="listbox"></ul>
+    <div class="start-pinned-wrap">
+      <p class="mono dim">Pinned</p>
+      <div id="start-pinned" class="start-pinned"></div>
+    </div>
+    <div class="start-foot">
+      <button class="btn-sm" data-settings>Settings</button>
+      <button class="power" data-power aria-label="Reboot">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3v8M6.3 6.3a8 8 0 1 0 11.4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="ctx" class="ctx" role="menu" hidden></div>
+  <div id="toast" class="toast mono" role="status"></div>
+
+  <script src="js/heat.js"></script>
+  <script src="js/apps.js"></script>
+  <script src="js/terminal.js"></script>
+  <script src="js/wm.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
