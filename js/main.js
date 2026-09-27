@@ -8,8 +8,29 @@
   const CONFIG = {
     email: 'agjokthomii@gmail.com',
     linkedin: 'https://www.linkedin.com/in/aristea-gjokthomi/',
+    // GoatCounter site code (the "xyz" in xyz.goatcounter.com). Empty = no analytics.
+    goatcounter: 'aristea',
   };
   window.CONFIG = CONFIG;
+
+  // ---------- analytics (cookie-free, GoatCounter) ----------
+  // Counts the page visit, plus one event per app a visitor opens.
+  const track = { app() {} };
+  if (CONFIG.goatcounter && !/^(localhost|127\.)/.test(location.hostname)) {
+    const gc = document.createElement('script');
+    gc.async = true;
+    gc.src = 'https://gc.zgo.at/count.js';
+    gc.dataset.goatcounter = `https://${CONFIG.goatcounter}.goatcounter.com/count`;
+    document.head.appendChild(gc);
+    const opened = new Set();
+    track.app = (id, title) => {
+      if (opened.has(id)) return; // once per app per visit
+      opened.add(id);
+      const send = () => window.goatcounter.count({ path: `app/${id}`, title: `Opened ${title}`, event: true });
+      if (window.goatcounter && window.goatcounter.count) send();
+      else gc.addEventListener('load', send, { once: true });
+    };
+  }
 
   const $ = s => document.querySelector(s);
   const store = {
@@ -229,6 +250,9 @@
     document.body.classList.add('booted');
     const id = fromHash();
     WM.open(id || 'about');
+    // Count deep links (e.g. /#/fiskal), but not the about window that opens for everyone.
+    if (id) track.app(id, Apps.get(id).title);
+    WM.onOpen = (appId, title) => track.app(appId, title);
   }
 
   const boot = $('#boot');
