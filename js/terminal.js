@@ -101,6 +101,10 @@
       return [`mean ${s.mean.toFixed(2)}°C · max ${s.max.toFixed(1)}°C · trees ${s.trees} · cooled ${OS.fmtCool(s.delta)}`];
     } },
     reset: { d: 'clear planted trees', run: () => { Heat.reset(); return ['trees cleared']; } },
+    wallpaper: { d: 'wallpaper galaxy|heat', run: a => {
+      if (!['galaxy', 'heat'].includes(a[0])) return [`current: ${OS.wallpaper()}. usage: wallpaper galaxy|heat`];
+      OS.setWallpaper(a[0]); return [`wallpaper → ${OS.wallpaper()}`];
+    } },
     theme: { d: 'theme dark|light|system', run: a => {
       const t = a[0];
       if (!['dark', 'light', 'system'].includes(t)) return ['usage: theme dark|light|system'];
@@ -157,6 +161,7 @@
         else if (parts[0] === 'open') pool = Apps.list.map(a => a.id);
         else if (parts[0] === 'cat') pool = [...Object.keys(FS), ...Object.keys(PROJECTS).map(p => 'projects/' + p)];
         else if (parts[0] === 'theme') pool = ['dark', 'light', 'system'];
+        else if (parts[0] === 'wallpaper') pool = ['galaxy', 'heat'];
         else pool = [];
         const m = pool.filter(p => p.startsWith(last));
         if (m.length === 1) { parts[parts.length - 1] = m[0]; inp.value = parts.join(' ') + (parts.length === 1 ? ' ' : ''); }
