@@ -81,26 +81,25 @@
       'Aristea Gjokthomi',
       'Tirana, Albania',
       '',
-      "Hi! I'm a data scientist. I did my MSc in Information Systems in",
-      'Economics at the University of Tirana, and most of what I build sits',
-      'somewhere between statistics, machine learning and actually shipping',
-      'something people can use.',
+      "Hi! I'm a data scientist. I did my MSc in Information Systems in Economics at the University of Tirana, and most of what I build sits somewhere between statistics, machine learning and actually shipping something people can use.",
       '',
-      'Stuff on this desktop (double-click the icons, or click a name here):',
+      'Stuff on this desktop (open the icons, or click a name here):',
       '',
-      `  ${L('coolcity', 'CoolCity')}          where should Tirana plant its next 1,000 trees?`,
-      '                    satellite data + LightGBM + a greedy planner',
-      `  ${L('fiskal', 'Asistenti Fiskal')}  answers questions about Albanian tax law, and has`,
-      '                    to cite the article or it refuses',
-      `  ${L('finscope', 'FinScope')}          my master\'s thesis: SEC filings -> warehouse ->`,
-      '                    forecasting and anomaly detection',
-      `  ${L('ndea', 'Bank NDEA')}         how efficient are 9 Albanian banks? (R, DEA)`,
+      `- ${L('coolcity', 'CoolCity')}`,
+      '  Where should Tirana plant its next 1,000 trees? Satellite data + LightGBM + a greedy planner.',
+      '',
+      `- ${L('fiskal', 'Asistenti Fiskal')}`,
+      '  Answers questions about Albanian tax law, and has to cite the article or it refuses.',
+      '',
+      `- ${L('finscope', 'FinScope')}`,
+      "  My master's thesis: SEC filings -> warehouse -> forecasting and anomaly detection.",
+      '',
+      `- ${L('ndea', 'Bank NDEA')}`,
+      '  How efficient are 9 Albanian banks? Done in R with network DEA.',
       '',
       'The wallpaper is a toy version of CoolCity btw. Click it to plant trees.',
       '',
-      'One habit I try to keep: decide how a result will be judged before',
-      "looking at it. On Asistenti Fiskal my main hypothesis didn't hold up,",
-      'and the README says exactly that.',
+      "One habit I try to keep: decide how a result will be judged before looking at it. On Asistenti Fiskal my main hypothesis didn't hold up, and the README says exactly that.",
       '',
       `github       <a href="https://github.com/Aristxa" target="_blank" rel="noopener">github.com/Aristxa</a>`,
       `huggingface  <a href="https://huggingface.co/aristeaaa" target="_blank" rel="noopener">huggingface.co/aristeaaa</a>`,
@@ -327,7 +326,7 @@
               <tr><td class="n">+18 pts</td><td>hybrid over keyword-only</td></tr>
             </tbody></table>
             <p class="built">Built with FAISS, BM25, RRF, sentence-transformers, Claude, Gradio, PyMuPDF.</p>
-            <div class="row-links"><button class="btn-sm primary" data-go="l">Try it live →</button><a class="btn-sm" href="https://github.com/Aristxa/Asistenti-Fiskal" target="_blank" rel="noopener">Source ↗</a><a class="btn-sm" href="https://huggingface.co/datasets/aristeaaa/asistenti-fiskal-korpus" target="_blank" rel="noopener">Dataset ↗</a></div>
+            <div class="row-links"><button class="btn-sm primary" data-go="l">Try it live →</button><a class="btn-sm" href="https://github.com/Aristxa/Asistenti-Fiskal" target="_blank" rel="noopener">Source ↗</a></div>
           </div>`;
         el.querySelector('[data-go]').addEventListener('click', () => b.querySelector('[data-t=l]').click());
       } },
@@ -497,9 +496,10 @@
     { f: 'archive', icon: 'file', name: 'Hospital Management System', meta: 'PHP · MySQL', desc: 'Role-based web app for admins, doctors and patients: records, appointments, medical history and billing.', url: 'https://github.com/Aristxa/Hospital-Management-System' },
     { f: 'archive', icon: 'file', name: 'Movie Management System', meta: 'PHP · SQL', desc: 'Catalogue platform for admins, users and cinema managers over a centralised database.', url: 'https://github.com/Aristxa/Movies-Management-System' },
     { f: 'archive', icon: 'file', name: 'Caffe Bistro', meta: 'TypeScript · Vite', desc: 'Marketing site for a bakery bistro.', url: 'https://github.com/Aristxa/DEMO-CAFFE-BISTRO' },
-    { f: 'data', icon: 'hf', name: 'asistenti-fiskal-korpus', meta: 'Hugging Face dataset', desc: 'The Albanian tax-law corpus behind Asistenti Fiskal.', url: 'https://huggingface.co/datasets/aristeaaa/asistenti-fiskal-korpus' },
+    { f: 'live', icon: 'hf', name: 'Asistenti Fiskal (live app)', meta: 'Hugging Face Space', desc: 'The working Asistenti Fiskal app. Ask it about Albanian tax law.', url: 'https://aristeaaa-assistent.hf.space/' },
+    { f: 'live', icon: 'hf', name: 'FinScope (live app)', meta: 'Hugging Face Space', desc: 'The FinScope dashboard, running on Hugging Face.', url: 'https://aristeaaa-finscope.hf.space/' },
   ];
-  const FOLDERS = [['all', 'All'], ['flagship', 'Flagship'], ['archive', 'Archive'], ['data', 'Datasets']];
+  const FOLDERS = [['all', 'All'], ['flagship', 'Flagship'], ['archive', 'Archive'], ['live', 'Live apps']];
 
   function mountExplorer(b) {
     b.classList.add('explorer');

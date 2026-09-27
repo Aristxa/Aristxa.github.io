@@ -571,14 +571,24 @@ blockquote { margin: 16px 0; padding: 4px 0 4px 14px; border-left: 3px solid var
 /* ============================================================
    Responsive
    ============================================================ */
-@media (max-width: 900px) {
-  .widget { display: none; }
-}
+.hint-touch { display: none; }
+@media (pointer: coarse) { .hint-mouse { display: none; } .hint-touch { display: inline; } }
 @media (max-width: 720px) {
   :root { --tb: 56px; }
   .icons { grid-auto-flow: row; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); grid-template-rows: none; grid-auto-rows: 98px; right: 10px; overflow-y: auto; }
   .d-icon { width: auto; }
   .hide-sm { display: none !important; }
+  /* Calmer wallpaper on phones. */
+  #wall { filter: saturate(.8); }
+  .wall-scrim { background: linear-gradient(rgba(6,7,10,.12), rgba(6,7,10,.12)); }
+  .np-text { font-size: 13px; }
+  /* Compact explainer pinned above the taskbar. */
+  .widget { top: auto; bottom: 10px; left: 10px; right: 10px; width: auto; padding: 10px 12px; border-radius: 14px; }
+  .widget .w-grid, .widget .w-info { display: none; }
+  .widget .w-head { margin-bottom: 8px; }
+  .widget .legend { margin-bottom: 6px; }
+  .widget .w-hint { margin-bottom: 8px; }
+  .icons { bottom: 150px; }
   .task span { display: none; }
   .task { padding: 0 9px; }
   .win-grip { display: none; }

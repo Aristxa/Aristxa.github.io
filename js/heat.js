@@ -77,8 +77,9 @@
     S.canvas.width = Math.round(S.cw * S.dpr);
     S.canvas.height = Math.round(S.ch * S.dpr);
 
-    const W = Math.max(90, Math.min(200, Math.round(S.cw / 8)));
-    const H = Math.max(50, Math.round(W * S.ch / S.cw));
+    // ~8px per cell everywhere, so heat blotches are the same physical size on a phone as on a desktop.
+    const W = Math.max(36, Math.min(200, Math.round(S.cw / 8)));
+    const H = Math.max(30, Math.round(W * S.ch / S.cw));
     S.W = W; S.H = H;
     const N = W * H;
     S.base = new Float32Array(N);
