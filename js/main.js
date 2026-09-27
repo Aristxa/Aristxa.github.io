@@ -111,8 +111,8 @@
   iconsEl.addEventListener('click', e => {
     const b = e.target.closest('.d-icon');
     if (!b) return;
+    if (coarse || e.detail === 0) { WM.open(b.dataset.app); return; } // touch tap or keyboard Enter: open, no highlight
     selectIcon(b);
-    if (coarse || e.detail === 0) WM.open(b.dataset.app); // touch tap or keyboard Enter
   });
   iconsEl.addEventListener('dblclick', e => { const b = e.target.closest('.d-icon'); if (b) WM.open(b.dataset.app); });
 
