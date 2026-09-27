@@ -8,7 +8,7 @@
   // Tiles are original; glyphs are Microsoft Fluent UI System Icons (MIT). See assets/ICONS-LICENSE.txt.
   const Icons = {
     html(key, size = 40) {
-      return `<img class="ico" src="assets/icons/${key}.svg?v=8" width="${size}" height="${size}" alt="" draggable="false" />`;
+      return `<img class="ico" src="assets/icons/${key}.svg?v=9" width="${size}" height="${size}" alt="" draggable="false" />`;
     },
   };
 
@@ -101,7 +101,7 @@
       `- ${L('kupon', 'Kupon')}`,
       '  Scan the QR code on any Albanian receipt and see where your money goes. Nothing leaves your phone.',
       '',
-      'The wallpaper is a toy version of CoolCity btw. Click it to plant trees.',
+      'Right-click the desktop and pick the CoolCity heat map wallpaper btw. You can plant trees on it.',
       '',
       "One habit I try to keep: decide how a result will be judged before looking at it. On Asistenti Fiskal my main hypothesis didn't hold up, and the README says exactly that.",
       '',
@@ -231,8 +231,8 @@
       { id: 't', label: 'Try it', render: el => {
         el.innerHTML = `
           <div class="case">
-            <h2 class="case-q">The wallpaper is a small CoolCity.</h2>
-            <p>Behind these windows is a synthetic surface-temperature field. Every tree cools its own cell and its neighbours, and cooling saturates when trees stack up.
+            <h2 class="case-q">Try a small CoolCity as your wallpaper.</h2>
+            <p>Switch the desktop to a synthetic surface-temperature field. Every tree cools its own cell and its neighbours, and cooling saturates when trees stack up.
             The planner uses the same idea as the real one: a <b>lazy greedy</b> search that places each tree where the population-weighted marginal cooling is largest.</p>
             <table class="facts"><tbody>
               <tr><td class="n" data-k="mean">—</td><td>mean surface</td></tr>
@@ -240,10 +240,12 @@
               <tr><td class="n cool" data-k="delta">0.00°</td><td>cooled</td></tr>
             </tbody></table>
             <div class="row-links">
-              <button class="btn-sm primary" data-run>▶ Plant 25 with greedy planner</button>
+              <button class="btn-sm primary" data-use>Use as wallpaper</button>
+              <button class="btn-sm" data-run>▶ Plant 25 with greedy planner</button>
               <button class="btn-sm" data-reset>Reset</button>
+              <button class="btn-sm" data-back>Back to galaxy</button>
             </div>
-            <p class="note">Toy model for illustration. The synthetic field is not Tirana data. Minimise this window to watch.</p>
+            <p class="note">Toy model for illustration. The synthetic field is not Tirana data. Minimise this window to watch, or click the wallpaper to plant trees yourself.</p>
           </div>`;
         const set = st => {
           el.querySelector('[data-k=mean]').textContent = st.mean.toFixed(1) + '°C';
@@ -251,6 +253,8 @@
           el.querySelector('[data-k=delta]').textContent = OS.fmtCool(st.delta);
         };
         Heat.onStats(set);
+        el.querySelector('[data-use]').addEventListener('click', () => OS.setWallpaper('heat'));
+        el.querySelector('[data-back]').addEventListener('click', () => OS.setWallpaper('galaxy'));
         el.querySelector('[data-run]').addEventListener('click', () => OS.runPlanner());
         el.querySelector('[data-reset]').addEventListener('click', () => Heat.reset());
       } },
@@ -829,8 +833,12 @@
           <div class="seg" role="radiogroup" aria-label="Theme">${['dark', 'light', 'system'].map(t => `<button role="radio" data-theme-set="${t}">${t}</button>`).join('')}</div>
         </section>
         <section><h4 class="mono">Wallpaper</h4>
-          <label class="switch"><input type="checkbox" data-anim /> <span>Animated heat shimmer</span></label>
-          <div class="row-links"><button class="btn-sm" data-run>Run planner</button><button class="btn-sm" data-reset>Clear trees</button></div>
+          <div class="seg" role="radiogroup" aria-label="Wallpaper">
+            <button role="radio" data-wall-set="galaxy">Galaxy</button>
+            <button role="radio" data-wall-set="heat">CoolCity heat map</button>
+          </div>
+          <p class="dim">The heat map is interactive: click it to plant trees, or run the greedy planner.</p>
+          <label class="switch"><input type="checkbox" data-anim /> <span>Animate the wallpaper</span></label>
         </section>
         <section><h4 class="mono">System</h4>
           <p class="dim">AristeaOS 1.0. Plain HTML, CSS and JavaScript, hosted on GitHub Pages.</p>
@@ -840,12 +848,12 @@
     const sync = () => {
       const cur = OS.themePref();
       b.querySelectorAll('[data-theme-set]').forEach(x => x.setAttribute('aria-checked', String(x.dataset.themeSet === cur)));
+      b.querySelectorAll('[data-wall-set]').forEach(x => x.setAttribute('aria-checked', String(x.dataset.wallSet === OS.wallpaper())));
       b.querySelector('[data-anim]').checked = Heat.animated;
     };
     b.addEventListener('click', e => {
       const t = e.target.closest('[data-theme-set]'); if (t) { OS.setTheme(t.dataset.themeSet); sync(); }
-      if (e.target.closest('[data-run]')) OS.runPlanner();
-      if (e.target.closest('[data-reset]')) Heat.reset();
+      const w = e.target.closest('[data-wall-set]'); if (w) { OS.setWallpaper(w.dataset.wallSet); sync(); }
       if (e.target.closest('[data-reboot]')) OS.reboot();
     });
     b.querySelector('[data-anim]').addEventListener('change', e => OS.setAnimated(e.target.checked));

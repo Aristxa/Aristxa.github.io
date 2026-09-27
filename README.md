@@ -4,7 +4,9 @@ Portfolio of **Aristea Gjokthomi**, a data scientist and ML engineer, built as a
 
 **Live:** https://aristxa.github.io
 
-- The **wallpaper is a live toy CoolCity model**. Hover to cast shade, click to plant a tree, or run the lazy-greedy planner.
+- The default **wallpaper is a WebGL spiral galaxy** (plain WebGL, no libraries) that turns slowly and tilts with the mouse.
+- Switch it to a **live toy CoolCity heat map** (right-click the desktop or Settings): hover to cast shade, click to plant a tree, or run the lazy-greedy planner.
+- Drag on the desktop to **rubber-band select** icons, like a real PC.
 - There is **one app per project**, each with an interactive view of its real published results. The Hugging Face Spaces run live inside the windows.
 - It's a real **window manager**: drag, snap to the left/right/top edge, resize, minimize, and maximize by double-clicking the title bar.
 - The **start menu has search** (`Ctrl`/`⌘` + `K`), and right-clicking the desktop opens a context menu.
@@ -21,7 +23,8 @@ App icons are original tiles with glyphs from [Microsoft Fluent UI System Icons]
 ```
 index.html        shell markup (boot screen, desktop, taskbar, start menu)
 css/style.css     all styles and theme tokens
-js/heat.js        wallpaper heat-field simulation + greedy planner
+js/galaxy.js      default wallpaper: WebGL spiral galaxy
+js/heat.js        optional wallpaper: heat-field simulation + greedy planner
 js/apps.js        icons, app registry and every app's content
 js/terminal.js    terminal commands
 js/wm.js          window manager (drag, snap, resize, taskbar)

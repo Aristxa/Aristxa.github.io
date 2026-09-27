@@ -39,6 +39,7 @@
   };
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const coarse = matchMedia('(pointer: coarse)').matches;
+  let wallpaper = store.get('wallpaper') === 'heat' ? 'heat' : 'galaxy';
 
   // ---------- theme ----------
   function applyTheme(pref) {
@@ -68,9 +69,19 @@
     themePref,
     setTheme(p) { store.set('theme', p); applyTheme(p); },
     toggleTheme() { OS.setTheme(effectiveTheme() === 'dark' ? 'light' : 'dark'); },
-    setAnimated(on) { store.set('anim', on ? '1' : '0'); Heat.setAnimated(on); },
+    setAnimated(on) { store.set('anim', on ? '1' : '0'); Heat.setAnimated(on); Galaxy.setAnimated(on); },
+    wallpaper: () => wallpaper,
+    setWallpaper(w) {
+      if (w === 'galaxy' && !Galaxy.ok) w = 'heat'; // no WebGL: the heat map always works
+      wallpaper = w;
+      store.set('wallpaper', w);
+      document.body.dataset.wall = w;
+      Galaxy.setEnabled(w === 'galaxy');
+      Heat.setEnabled(w === 'heat');
+    },
     async runPlanner(n = 25) {
       if (Heat.busy) return;
+      if (wallpaper !== 'heat') { OS.setWallpaper('heat'); toast('Wallpaper switched to the CoolCity heat map'); await new Promise(r => setTimeout(r, 600)); }
       const btn = $('#w-run');
       btn.disabled = true;
       toast(`Greedy planner: placing ${n} trees…`);
@@ -105,9 +116,10 @@
 
   // ---------- wallpaper interaction ----------
   const desktop = $('#desktop');
-  const isWall = t => t === desktop || t.id === 'icons' || t.id === 'windows' || t.classList.contains('wall-scrim');
+  const isWall = t => t === desktop || ['icons', 'windows', 'galaxy', 'wall'].includes(t.id) || t.classList.contains('wall-scrim');
   let lastShade = 0;
-  desktop.addEventListener('pointermove', e => {
+  document.addEventListener('pointermove', e => {
+    if (wallpaper === 'galaxy') { Galaxy.look(e.clientX / innerWidth * 2 - 1, e.clientY / innerHeight * 2 - 1); return; }
     if (!isWall(e.target) || document.body.classList.contains('is-dragging')) return;
     const now = performance.now();
     if (now - lastShade < 16) return;
@@ -115,10 +127,39 @@
     Heat.shadeAt(e.clientX, e.clientY);
   });
   desktop.addEventListener('click', e => {
-    if (!isWall(e.target)) return;
+    if (!isWall(e.target) || rubberMoved) return;
     selectIcon(null);
     closeMenus();
-    Heat.plantAt(e.clientX, e.clientY);
+    if (wallpaper === 'heat') Heat.plantAt(e.clientX, e.clientY);
+  });
+
+  // Drag on empty desktop to rubber-band select icons, like a real PC.
+  const rubber = document.createElement('div');
+  rubber.className = 'rubber';
+  desktop.appendChild(rubber);
+  let rubberMoved = false;
+  desktop.addEventListener('pointerdown', e => {
+    if (e.button !== 0 || coarse || !isWall(e.target)) return;
+    const sx = e.clientX, sy = e.clientY;
+    rubberMoved = false;
+    const move = ev => {
+      const x = Math.min(sx, ev.clientX), y = Math.min(sy, ev.clientY), w = Math.abs(ev.clientX - sx), h = Math.abs(ev.clientY - sy);
+      if (!rubberMoved && w + h < 6) return;
+      rubberMoved = true;
+      Object.assign(rubber.style, { left: x + 'px', top: y + 'px', width: w + 'px', height: h + 'px', display: 'block' });
+      iconsEl.querySelectorAll('.d-icon').forEach(ic => {
+        const r = ic.getBoundingClientRect();
+        ic.classList.toggle('sel', r.right > x && r.left < x + w && r.bottom > y && r.top < y + h);
+      });
+    };
+    const up = () => {
+      removeEventListener('pointermove', move);
+      removeEventListener('pointerup', up);
+      rubber.style.display = 'none';
+      setTimeout(() => (rubberMoved = false), 0);
+    };
+    addEventListener('pointermove', move);
+    addEventListener('pointerup', up);
   });
 
   // ---------- widget ----------
@@ -139,8 +180,10 @@
   const sList = $('#start-results');
   const pinned = $('#start-pinned');
   const ACTIONS = [
-    { label: 'Run greedy tree planner', hint: 'wallpaper', run: () => OS.runPlanner() },
-    { label: 'Clear planted trees', hint: 'wallpaper', run: () => Heat.reset() },
+    { label: 'Wallpaper: galaxy', hint: 'wallpaper', run: () => OS.setWallpaper('galaxy') },
+    { label: 'Wallpaper: CoolCity heat map', hint: 'wallpaper', run: () => OS.setWallpaper('heat') },
+    { label: 'Run greedy tree planner', hint: 'CoolCity', run: () => OS.runPlanner() },
+    { label: 'Clear planted trees', hint: 'CoolCity', run: () => Heat.reset() },
     { label: 'Toggle light / dark', hint: 'theme', run: () => OS.toggleTheme() },
     { label: 'Show desktop', hint: 'windows', run: () => WM.minimizeAll() },
     { label: 'Reboot AristeaOS', hint: 'system', run: () => OS.reboot() },
@@ -193,8 +236,8 @@
   // ---------- context menu ----------
   const ctx = $('#ctx');
   const CTX = [
-    ['Plant 25 trees (greedy)', () => OS.runPlanner()],
-    ['Clear trees', () => Heat.reset()],
+    ['Wallpaper: galaxy', () => OS.setWallpaper('galaxy')],
+    ['Wallpaper: CoolCity heat map', () => OS.setWallpaper('heat')],
     null,
     ['Open Terminal', () => WM.open('terminal')],
     ['Open Projects', () => WM.open('projects')],
@@ -244,7 +287,10 @@
 
   // ---------- boot ----------
   WM.init({ layer: $('#windows'), taskList: $('#tasks') });
-  Heat.init($('#wall'), { animated: !reduced && store.get('anim') !== '0' });
+  const animated = !reduced && store.get('anim') !== '0';
+  Galaxy.init($('#galaxy'), { animated, enabled: false });
+  Heat.init($('#wall'), { animated, enabled: false });
+  OS.setWallpaper(wallpaper);
 
   function ready() {
     document.body.classList.add('booted');
@@ -265,7 +311,7 @@
     const LINES = [
       ['AristeaOS 1.0', ''],
       ['mounted /home/aristea', ''],
-      ['loaded wallpaper', '14,630 cells'],
+      ['loaded wallpaper', ''],
       ['started window manager', ''],
       ['started terminal', ''],
       ['reached target desktop', ''],

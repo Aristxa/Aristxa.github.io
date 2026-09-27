@@ -228,7 +228,7 @@
   }
 
   function start() {
-    if (S.running) return;
+    if (S.running || !S.enabled || document.hidden) return;
     S.running = true;
     requestAnimationFrame(loop);
   }
@@ -265,6 +265,7 @@
       S.canvas = canvas;
       S.ctx = canvas.getContext('2d');
       S.animated = opts.animated !== false;
+      S.enabled = opts.enabled !== false;
       build();
       render(performance.now());
       start();
@@ -313,6 +314,13 @@
       emit();
     },
     setAnimated(on) { S.animated = !!on; S.dirty = true; },
+    // Only runs while it is the chosen wallpaper. Rebuild on enable, since the grid
+    // is sized from the canvas, which has no size while hidden.
+    setEnabled(on) {
+      S.enabled = !!on;
+      if (on) { build(); render(performance.now()); start(); } else stop();
+    },
+    get enabled() { return S.enabled; },
     get animated() { return S.animated; },
   };
 

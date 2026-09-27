@@ -16,10 +16,11 @@
   --cool: #5eead4;
   --violet: #a78bfa;
   --glass: rgba(12, 13, 17, .62);
+  --taskbar: rgba(16, 16, 19, .94);
   --shadow: 0 30px 80px -20px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 255, 255, .06);
   --sans: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
   --mono: "Cascadia Mono", "Cascadia Code", Consolas, ui-monospace, "SF Mono", Menlo, monospace;
-  --tb: 52px;
+  --tb: 48px;
   color-scheme: dark;
 }
 :root[data-theme="light"] {
@@ -37,6 +38,7 @@
   --cool: #0e9f8b;
   --violet: #6d4fd8;
   --glass: rgba(250, 249, 246, .72);
+  --taskbar: rgba(238, 238, 240, .94);
   --shadow: 0 30px 70px -24px rgba(20, 16, 8, .45), 0 0 0 1px rgba(0, 0, 0, .08);
   color-scheme: light;
 }
@@ -56,6 +58,7 @@
     --cool: #0e9f8b;
     --violet: #6d4fd8;
     --glass: rgba(250, 249, 246, .72);
+    --taskbar: rgba(238, 238, 240, .94);
     --shadow: 0 30px 70px -24px rgba(20, 16, 8, .45), 0 0 0 1px rgba(0, 0, 0, .08);
     color-scheme: light;
   }
@@ -121,7 +124,13 @@ body.shutting-down .desktop, body.shutting-down .taskbar { transition: opacity .
    Desktop
    ============================================================ */
 .desktop { position: fixed; inset: 0 0 var(--tb) 0; overflow: hidden; }
-#wall { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; }
+#wall, #galaxy { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
+#wall { cursor: crosshair; }
+#galaxy { background: #030305; }
+body[data-wall="heat"] #wall, body[data-wall="galaxy"] #galaxy { display: block; }
+/* The scrim, widget and crosshair belong to the interactive heat map only. */
+body:not([data-wall="heat"]) .wall-scrim, body:not([data-wall="heat"]) .widget { display: none; }
+.rubber { position: absolute; display: none; pointer-events: none; z-index: 1; border: 1px solid rgba(96,165,250,.85); background: rgba(96,165,250,.16); }
 .wall-scrim {
   position: absolute; inset: 0;
   background:
@@ -131,10 +140,11 @@ body.shutting-down .desktop, body.shutting-down .taskbar { transition: opacity .
     repeating-linear-gradient(90deg, rgba(255,255,255,.028) 0 1px, transparent 1px 24px);
   cursor: crosshair;
 }
+body[data-wall="heat"] .icons { cursor: crosshair; }
 .icons {
   position: absolute; top: 14px; left: 10px; bottom: 14px;
   display: grid; grid-auto-flow: column; grid-template-rows: repeat(auto-fill, 98px); grid-auto-columns: 92px; gap: 4px 6px;
-  align-content: start; cursor: crosshair;
+  align-content: start;
 }
 .d-icon {
   width: 92px; height: 96px; border-radius: 12px; padding: 8px 4px 6px;
@@ -186,7 +196,7 @@ body.shutting-down .desktop, body.shutting-down .taskbar { transition: opacity .
 .win {
   position: absolute; pointer-events: auto;
   display: flex; flex-direction: column; min-width: 280px; min-height: 200px;
-  background: var(--win); border-radius: 14px; overflow: hidden;
+  background: var(--win); border-radius: 8px; overflow: hidden;
   box-shadow: var(--shadow);
   backdrop-filter: blur(26px) saturate(1.5); -webkit-backdrop-filter: blur(26px) saturate(1.5);
   transition: opacity .18s ease, transform .22s cubic-bezier(.2,.9,.3,1.1), left .22s cubic-bezier(.2,.8,.2,1), top .22s cubic-bezier(.2,.8,.2,1), width .22s cubic-bezier(.2,.8,.2,1), height .22s cubic-bezier(.2,.8,.2,1);
@@ -224,7 +234,7 @@ body.shutting-down .desktop, body.shutting-down .taskbar { transition: opacity .
 .taskbar {
   position: fixed; left: 0; right: 0; bottom: 0; height: var(--tb); z-index: 900;
   display: flex; align-items: center; gap: 6px; padding: 0 0 0 8px;
-  background: var(--glass); border-top: 1px solid rgba(127,127,127,.18);
+  background: var(--taskbar); border-top: 1px solid rgba(127,127,127,.16);
   backdrop-filter: blur(24px) saturate(1.6); -webkit-backdrop-filter: blur(24px) saturate(1.6);
 }
 .start-btn { width: 42px; height: 40px; border-radius: 10px; display: grid; place-items: center; flex: none; transition: background .15s; }
@@ -233,7 +243,7 @@ body.shutting-down .desktop, body.shutting-down .taskbar { transition: opacity .
 .tasks { flex: 1; min-width: 0; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; height: 100%; align-items: center; }
 .tasks::-webkit-scrollbar { display: none; }
 .task {
-  position: relative; height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 12px 0 9px; border-radius: 10px;
+  position: relative; height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 12px 0 9px; border-radius: 4px;
   font-size: .8rem; color: var(--ink-2); max-width: 190px; flex: none; transition: background .15s;
 }
 .task span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
