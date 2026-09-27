@@ -40,6 +40,7 @@
     finscope: 'FinScope: SEC EDGAR → star schema → 5-model forecasting + anomaly detection.',
     ndea: 'Bank NDEA: Dynamic Network DEA of 9 Albanian banks, 2021–2023.',
     speakup: 'Guxo: bilingual public-speaking practice app with live transcript and filler-word tracking.',
+    kupon: 'Kupon: scan Albanian receipts, get items + VAT from the tax portal, track prices, split by item.',
   };
 
   const COMMANDS = {

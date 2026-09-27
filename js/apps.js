@@ -8,7 +8,7 @@
   // Tiles are original; glyphs are Microsoft Fluent UI System Icons (MIT). See assets/ICONS-LICENSE.txt.
   const Icons = {
     html(key, size = 40) {
-      return `<img class="ico" src="assets/icons/${key}.svg?v=6" width="${size}" height="${size}" alt="" draggable="false" />`;
+      return `<img class="ico" src="assets/icons/${key}.svg?v=7" width="${size}" height="${size}" alt="" draggable="false" />`;
     },
   };
 
@@ -97,6 +97,9 @@
       '',
       `- ${L('speakup', 'Guxo')}`,
       '  A bilingual (EN/SQ) app for practising public speaking. It listens, counts your filler words and tracks your nerves over time.',
+      '',
+      `- ${L('kupon', 'Kupon')}`,
+      '  Scan the QR code on any Albanian receipt and see where your money goes. Nothing leaves your phone.',
       '',
       'The wallpaper is a toy version of CoolCity btw. Click it to plant trees.',
       '',
@@ -519,6 +522,45 @@
   }
 
   // ============================================================
+  // Kupon
+  // ============================================================
+  function mountKupon(b) {
+    tabs(b, [
+      { id: 'o', label: 'Overview', render: el => {
+        el.innerHTML = `
+          <div class="case">
+            <h2 class="case-q">Kupon: scan your receipts, see where your money goes.</h2>
+            <p>By law, every fiscal receipt in Albania carries a QR code. The tax authority's portal only uses it to check that a receipt is valid,
+            and apps like Expensify don't understand Albanian receipts. Kupon is a phone app built on that QR code: point the camera at a receipt
+            and the store, items, VAT and total are logged, with no typing and no account.</p>
+            <table class="facts"><tbody>
+              <tr><td class="n">1 scan</td><td>logs a receipt: camera, photo upload or pasted link, with duplicates caught by the receipt's unique code</td></tr>
+              <tr><td class="n">48 h</td><td>the window in which tills without internet may declare late. Kupon keeps checking, then flags receipts the tax authority never received</td></tr>
+              <tr><td class="n">2</td><td>languages: Albanian first, English toggle</td></tr>
+              <tr><td class="n">0</td><td>Kupon servers. Receipts stay in the browser, and it works offline</td></tr>
+            </tbody></table>
+            <h4 class="mono">What it does</h4>
+            <ul class="bul">
+              <li><b>Declared check</b>: every receipt is looked up on the tax authority's public portal, which returns the store name, the items and the VAT, and shows whether the receipt was declared.</li>
+              <li><b>Price memory</b>: every product you buy gets a price history across stores, showing where it is cheapest and how its price has changed.</li>
+              <li><b>Split the bill</b>: equally, by amount, or by item (tap who had what), then a ready message for WhatsApp (<i>Secili: 1 450 L</i>).</li>
+              <li><b>Overview</b>: this month against the same days of last month, VAT paid, spend by category and store, and monthly budgets.</li>
+              <li><b>Warranty vault</b>: mark a receipt as under warranty, see what expires soon, and add a calendar reminder.</li>
+            </ul>
+            <h4 class="mono">The trick</h4>
+            <p>The QR code only holds the store's tax ID, the date and the total. The portal's own page gets the rest with a plain form POST,
+            which needs no CORS preflight, and the endpoint allows any origin. So the app reads it straight from the phone, with no proxy or scraping:
+            one request per receipt you scan.</p>
+            <p class="built">Built with vanilla JavaScript, BarcodeDetector with a jsQR fallback, localStorage and a service worker (installable PWA). No framework, no build step.</p>
+            <div class="row-links"><button class="btn-sm primary" data-go="l">Try it here →</button><a class="btn-sm" href="https://aristxa.github.io/KUPON/" target="_blank" rel="noopener">Open on your phone ↗</a><a class="btn-sm" href="https://github.com/Aristxa/KUPON" target="_blank" rel="noopener">Source ↗</a></div>
+          </div>`;
+        el.querySelector('[data-go]').addEventListener('click', () => b.querySelector('[data-t=l]').click());
+      } },
+      { id: 'l', label: 'Live', flush: true, render: el => live(el, 'https://aristxa.github.io/KUPON/', { wake: false, title: 'Kupon', allow: 'camera; clipboard-write' }) },
+    ]);
+  }
+
+  // ============================================================
   // Explorer
   // ============================================================
   const FILES = [
@@ -527,6 +569,7 @@
     { f: 'flagship', icon: 'finscope', name: 'FinScope', meta: 'Python · FastAPI · forecasting', open: 'finscope' },
     { f: 'flagship', icon: 'ndea', name: 'Bank Efficiency NDEA', meta: 'R · DEA · Quarto', open: 'ndea' },
     { f: 'flagship', icon: 'speakup', name: 'Guxo · Speak Boldly', meta: 'JavaScript · Web Audio · Web Speech', open: 'speakup', url: 'https://github.com/Aristxa/Speak-UP' },
+    { f: 'flagship', icon: 'kupon', name: 'Kupon', meta: 'JavaScript · QR scanning · PWA', open: 'kupon', url: 'https://github.com/Aristxa/KUPON' },
     { f: 'archive', icon: 'music', name: 'Music AI Generator', meta: 'TensorFlow · LSTM · Music21', desc: 'LSTM sequence model trained on the MAESTRO piano dataset. Generates 30–60 s melodies with MIDI export and a web player.', open: 'music', url: 'https://github.com/Aristxa/Music-AI-Generator' },
     { f: 'archive', icon: 'file', name: 'Hospital Management System', meta: 'PHP · MySQL', desc: 'Role-based web app for admins, doctors and patients: records, appointments, medical history and billing.', url: 'https://github.com/Aristxa/Hospital-Management-System' },
     { f: 'archive', icon: 'file', name: 'Movie Management System', meta: 'PHP · SQL', desc: 'Catalogue platform for admins, users and cinema managers over a centralised database.', url: 'https://github.com/Aristxa/Movies-Management-System' },
@@ -820,6 +863,7 @@
     { id: 'finscope', title: 'FinScope', icon: 'finscope', label: 'FinScope', w: 760, h: 640, mount: mountFinScope, desc: 'SEC EDGAR analytics platform' },
     { id: 'ndea', title: 'Bank Efficiency · NDEA', icon: 'ndea', label: 'Bank NDEA', w: 740, h: 620, mount: mountNDEA, desc: 'Dynamic Network DEA' },
     { id: 'speakup', title: 'Guxo · Speak Boldly', icon: 'speakup', label: 'Guxo', w: 820, h: 660, mount: mountSpeakUp, desc: 'Public-speaking practice app' },
+    { id: 'kupon', title: 'Kupon', icon: 'kupon', label: 'Kupon', w: 760, h: 680, mount: mountKupon, desc: 'Receipt scanner for Albania' },
     { id: 'terminal', title: 'Terminal', icon: 'terminal', label: 'Terminal', w: 640, h: 420, mount: (b, w) => window.Terminal.mount(b, w), desc: 'Type help' },
     { id: 'music', title: 'melody.exe', icon: 'music', label: 'melody.exe', w: 620, h: 400, mount: mountMusic, desc: 'Generative music toy' },
     { id: 'github', title: 'GitHub · live', icon: 'github', label: 'GitHub', w: 620, h: 580, mount: mountGitHub, desc: 'Live repos from the API' },
