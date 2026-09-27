@@ -188,9 +188,36 @@
     { label: 'Show desktop', hint: 'windows', run: () => WM.minimizeAll() },
     { label: 'Reboot AristeaOS', hint: 'system', run: () => OS.reboot() },
   ];
-  pinned.innerHTML = Apps.list.filter(a => a.id !== 'settings' || true).map(a =>
-    `<button class="pin" data-app="${a.id}">${Icons.html(a.icon, 36)}<span>${a.label}</span></button>`).join('');
-  pinned.addEventListener('click', e => { const b = e.target.closest('[data-app]'); if (b) { closeMenus(); WM.open(b.dataset.app); } });
+  // All apps, A to Z, with the projects grouped in a folder like Windows 10.
+  const PROJECT_IDS = ['coolcity', 'fiskal', 'finscope', 'ndea', 'speakup', 'kupon'];
+  const FOLDER = '<svg class="folder-ico" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M2 6.5A1.5 1.5 0 0 1 3.5 5h5.4l2 2h9.6A1.5 1.5 0 0 1 22 8.5V18a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18z" fill="#e8a92c"/><path d="M2 9.5h20V18a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18z" fill="#f7c948"/></svg>';
+  const CHEV = '<svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+  const byLabel = (a, b) => a.label.localeCompare(b.label, 'en', { sensitivity: 'base' });
+  const appRow = (a, cls = '') => `<button class="sl-item ${cls}" data-app="${a.id}" role="listitem">${Icons.html(a.icon, 22)}<span>${a.label}</span></button>`;
+  const rows = [
+    { label: 'Projects', html: `<button class="sl-item sl-folder" data-folder aria-expanded="true">${FOLDER}<span>Projects</span>${CHEV}</button><div class="sl-sub">${PROJECT_IDS.map(id => appRow(Apps.get(id), 'sub')).join('')}</div>` },
+    ...Apps.list.filter(a => !PROJECT_IDS.includes(a.id)).map(a => ({ label: a.label, html: appRow(a) })),
+  ].sort(byLabel);
+  pinned.innerHTML = rows.map(r => r.html).join('');
+  pinned.addEventListener('click', e => {
+    const f = e.target.closest('[data-folder]');
+    if (f) { f.setAttribute('aria-expanded', String(f.getAttribute('aria-expanded') !== 'true')); return; }
+    const b = e.target.closest('[data-app]');
+    if (b) { closeMenus(); WM.open(b.dataset.app); }
+  });
+
+  start.querySelector('.start-rail').addEventListener('click', e => {
+    const r = e.target.closest('[data-rail]');
+    if (!r) return;
+    const act = r.dataset.rail;
+    if (act === 'expand') { start.classList.toggle('expanded'); return; }
+    if (act === 'apps') { start.classList.remove('expanded'); return; }
+    closeMenus();
+    if (act === 'me' || act === 'about') WM.open('about');
+    else if (act === 'settings') WM.open('settings');
+    else if (act === 'power') OS.reboot();
+  });
+  $('#search-btn').addEventListener('click', e => { e.stopPropagation(); start.hidden ? openStart(true) : closeStart(); });
 
   let results = [], sel = 0;
   function renderResults() {
@@ -219,18 +246,17 @@
     else if (e.key === 'Enter' && results[sel]) { const r = results[sel]; closeMenus(); r.run(); }
   });
   sList.addEventListener('click', e => { const li = e.target.closest('li[data-i]'); if (li) { const r = results[+li.dataset.i]; closeMenus(); r.run(); } });
-  start.querySelector('[data-power]').addEventListener('click', () => OS.reboot());
-  start.querySelector('[data-settings]').addEventListener('click', () => { closeMenus(); WM.open('settings'); });
 
-  function openStart() {
+  // Focus the search box unless it would pop up a phone keyboard nobody asked for.
+  function openStart(focusSearch = !coarse) {
     closeCtx();
     start.hidden = false;
     startBtn.setAttribute('aria-expanded', 'true');
     sInput.value = '';
     renderResults();
-    setTimeout(() => sInput.focus(), 20);
+    if (focusSearch) setTimeout(() => sInput.focus(), 20);
   }
-  function closeStart() { start.hidden = true; startBtn.setAttribute('aria-expanded', 'false'); }
+  function closeStart() { start.hidden = true; start.classList.remove('expanded'); startBtn.setAttribute('aria-expanded', 'false'); }
   startBtn.addEventListener('click', e => { e.stopPropagation(); start.hidden ? openStart() : closeStart(); });
 
   // ---------- context menu ----------
@@ -260,7 +286,7 @@
   function closeCtx() { ctx.hidden = true; }
   function closeMenus() { closeStart(); closeCtx(); }
   document.addEventListener('pointerdown', e => {
-    if (!start.hidden && !start.contains(e.target) && !startBtn.contains(e.target)) closeStart();
+    if (!start.hidden && !start.contains(e.target) && !startBtn.contains(e.target) && !e.target.closest('#search-btn')) closeStart();
     if (!ctx.hidden && !ctx.contains(e.target)) closeCtx();
   });
 
@@ -277,7 +303,7 @@
 
   // ---------- keyboard ----------
   document.addEventListener('keydown', e => {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); start.hidden ? openStart() : closeStart(); }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); start.hidden ? openStart(true) : closeStart(); }
     else if (e.key === 'Escape') closeMenus();
   });
 

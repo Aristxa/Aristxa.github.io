@@ -17,8 +17,8 @@
   <meta name="twitter:image" content="https://aristxa.github.io/assets/og.png" />
   <link rel="canonical" href="https://aristxa.github.io/" />
   <meta name="theme-color" content="#0b0c0f" />
-  <link rel="icon" href="assets/icons/coolcity.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="css/style.css?v=9" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='4' y='4' width='11' height='11' rx='2' fill='%23ff9a3c'/><rect x='17' y='4' width='11' height='11' rx='2' fill='%23d23f2a'/><rect x='4' y='17' width='11' height='11' rx='2' fill='%230e9f8b'/><rect x='17' y='17' width='11' height='11' rx='2' fill='%235eead4'/></svg>" />
+  <link rel="stylesheet" href="css/style.css?v=11" />
   <script>
     try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}
   </script>
@@ -84,6 +84,7 @@
     <button id="start-btn" class="start-btn" aria-label="Start" aria-haspopup="true" aria-expanded="false">
       <span class="logo"><i></i><i></i><i></i><i></i></span>
     </button>
+    <button id="search-btn" class="search-btn" aria-label="Search"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4"/></svg></button>
     <div id="tasks" class="tasks" aria-label="Open windows"></div>
     <div class="tray">
       <a class="tray-btn hide-sm" href="https://github.com/Aristxa" target="_blank" rel="noopener" aria-label="GitHub">
@@ -97,38 +98,36 @@
     </div>
   </footer>
 
-  <!-- Start menu -->
+  <!-- Start menu (Windows 10 layout: icon rail + app list) -->
   <div id="start" class="start" hidden>
-    <div class="start-head">
-      <img class="avatar" src="assets/avatar.jpg" width="40" height="40" alt="" />
-      <div><b>Aristea Gjokthomi</b><span class="dim">Data scientist</span></div>
-    </div>
-    <label class="start-search">
-      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      <input id="start-search" type="text" placeholder="Search apps and actions…" autocomplete="off" spellcheck="false" aria-label="Search" />
-      <kbd>Ctrl K</kbd>
-    </label>
-    <ul id="start-results" class="start-results" role="listbox"></ul>
-    <div class="start-pinned-wrap">
-      <p class="mono dim">Pinned</p>
-      <div id="start-pinned" class="start-pinned"></div>
-    </div>
-    <div class="start-foot">
-      <button class="btn-sm" data-settings>Settings</button>
-      <button class="power" data-power aria-label="Reboot">
-        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3v8M6.3 6.3a8 8 0 1 0 11.4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </button>
+    <nav class="start-rail" aria-label="Start">
+      <button class="rail-btn" data-rail="expand" title="Expand"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span><b>START</b></span></button>
+      <button class="rail-btn active" data-rail="apps" title="All apps"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="4" height="4"/><rect x="4" y="10" width="4" height="4"/><rect x="4" y="16" width="4" height="4"/><path d="M11 6h9M11 12h9M11 18h9"/></svg><span>All apps</span></button>
+      <div class="rail-gap"></div>
+      <button class="rail-btn" data-rail="me" title="Aristea Gjokthomi"><img class="rail-avatar" src="assets/avatar.jpg" width="24" height="24" alt="" /><span>Aristea Gjokthomi</span></button>
+      <button class="rail-btn" data-rail="about" title="Documents"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v5h5"/><path d="M14 3H6v18h13V8z"/></svg><span>about_me.txt</span></button>
+      <button class="rail-btn" data-rail="settings" title="Settings"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Settings</span></button>
+      <button class="rail-btn" data-rail="power" title="Power"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v8"/><path d="M6.3 6.3a8 8 0 1 0 11.4 0"/></svg><span>Restart</span></button>
+    </nav>
+    <div class="start-main">
+      <label class="start-search">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4"/></svg>
+        <input id="start-search" type="text" placeholder="Type here to search" autocomplete="off" spellcheck="false" aria-label="Search" />
+      </label>
+      <ul id="start-results" class="start-results" role="listbox"></ul>
+      <div id="start-pinned" class="start-list" role="list"></div>
     </div>
   </div>
 
   <div id="ctx" class="ctx" role="menu" hidden></div>
   <div id="toast" class="toast mono" role="status"></div>
 
-  <script src="js/galaxy.js?v=9"></script>
-  <script src="js/heat.js?v=9"></script>
-  <script src="js/apps.js?v=9"></script>
-  <script src="js/terminal.js?v=9"></script>
-  <script src="js/wm.js?v=9"></script>
-  <script src="js/main.js?v=9"></script>
+  <script src="js/vendor/daedalos-galaxy.js?v=11"></script>
+  <script src="js/galaxy.js?v=11"></script>
+  <script src="js/heat.js?v=11"></script>
+  <script src="js/apps.js?v=11"></script>
+  <script src="js/terminal.js?v=11"></script>
+  <script src="js/wm.js?v=11"></script>
+  <script src="js/main.js?v=11"></script>
 </body>
 </html>
