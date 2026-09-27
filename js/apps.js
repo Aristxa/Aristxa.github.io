@@ -863,9 +863,10 @@
           <p class="dim">The heat map is interactive: click it to plant trees, or run the greedy planner.</p>
           <label class="switch"><input type="checkbox" data-anim /> <span>Animate the wallpaper</span></label>
         </section>
-        <section><h4 class="mono">Icon colour</h4>
+        <section><h4 class="mono">Desktop icon colour</h4>
           <div class="seg" role="radiogroup" aria-label="Icon colour">
-            <button role="radio" data-icons-set="colour">Colour</button>
+            <button role="radio" data-icons-set="starlight">Starlight</button>
+            <button role="radio" data-icons-set="ice">Ice</button>
             <button role="radio" data-icons-set="white">White</button>
           </div>
         </section>

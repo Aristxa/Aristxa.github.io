@@ -319,7 +319,7 @@
   Galaxy.init($('#galaxy'), { animated, enabled: false });
   Heat.init($('#wall'), { animated, enabled: false });
   OS.setWallpaper(wallpaper);
-  document.body.dataset.icons = store.get('icons') === 'white' ? 'white' : 'colour';
+  document.body.dataset.icons = ['white', 'ice'].includes(store.get('icons')) ? store.get('icons') : 'starlight';
 
   function ready() {
     document.body.classList.add('booted');
