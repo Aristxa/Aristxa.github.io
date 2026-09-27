@@ -34,6 +34,7 @@ js/main.js        boot, desktop, start menu, context menu, routing, CONFIG
 - **About text:** the `text` array in `mountAbout` in `js/apps.js`. It's written in first person, so make it sound like you.
 - **Projects and text:** everything lives in `js/apps.js`, one `mount…` function per app.
 - **Desktop icons:** the `DESKTOP` array in `js/main.js`.
+- **After changing CSS/JS:** bump the `?v=` number on the `<link>`/`<script>` tags in `index.html`, so phones don't keep serving old cached files.
 
 ## Run locally
 
