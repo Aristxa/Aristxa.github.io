@@ -863,6 +863,12 @@
           <p class="dim">The heat map is interactive: click it to plant trees, or run the greedy planner.</p>
           <label class="switch"><input type="checkbox" data-anim /> <span>Animate the wallpaper</span></label>
         </section>
+        <section><h4 class="mono">Icon colour</h4>
+          <div class="seg" role="radiogroup" aria-label="Icon colour">
+            <button role="radio" data-icons-set="colour">Colour</button>
+            <button role="radio" data-icons-set="white">White</button>
+          </div>
+        </section>
         <section><h4 class="mono">System</h4>
           <p class="dim">AristeaOS 1.0. Plain HTML, CSS and JavaScript, hosted on GitHub Pages.</p>
           <div class="row-links"><button class="btn-sm" data-reboot>Reboot</button><a class="btn-sm" href="https://github.com/Aristxa/Aristxa.github.io" target="_blank" rel="noopener">View source ↗</a></div>
@@ -872,11 +878,13 @@
       const cur = OS.themePref();
       b.querySelectorAll('[data-theme-set]').forEach(x => x.setAttribute('aria-checked', String(x.dataset.themeSet === cur)));
       b.querySelectorAll('[data-wall-set]').forEach(x => x.setAttribute('aria-checked', String(x.dataset.wallSet === OS.wallpaper())));
+      b.querySelectorAll('[data-icons-set]').forEach(x => x.setAttribute('aria-checked', String(x.dataset.iconsSet === OS.iconStyle())));
       b.querySelector('[data-anim]').checked = Heat.animated;
     };
     b.addEventListener('click', e => {
       const t = e.target.closest('[data-theme-set]'); if (t) { OS.setTheme(t.dataset.themeSet); sync(); }
       const w = e.target.closest('[data-wall-set]'); if (w) { OS.setWallpaper(w.dataset.wallSet); sync(); }
+      const ic = e.target.closest('[data-icons-set]'); if (ic) { OS.setIconStyle(ic.dataset.iconsSet); sync(); }
       if (e.target.closest('[data-reboot]')) OS.reboot();
     });
     b.querySelector('[data-anim]').addEventListener('change', e => OS.setAnimated(e.target.checked));

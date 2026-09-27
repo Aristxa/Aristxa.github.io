@@ -70,6 +70,8 @@
     setTheme(p) { store.set('theme', p); applyTheme(p); },
     toggleTheme() { OS.setTheme(effectiveTheme() === 'dark' ? 'light' : 'dark'); },
     setAnimated(on) { store.set('anim', on ? '1' : '0'); Heat.setAnimated(on); Galaxy.setAnimated(on); },
+    iconStyle: () => document.body.dataset.icons,
+    setIconStyle(v) { store.set('icons', v); document.body.dataset.icons = v; },
     wallpaper: () => wallpaper,
     setWallpaper(w) {
       if (w === 'galaxy' && !Galaxy.ok) w = 'heat'; // no WebGL: the heat map always works
@@ -317,6 +319,7 @@
   Galaxy.init($('#galaxy'), { animated, enabled: false });
   Heat.init($('#wall'), { animated, enabled: false });
   OS.setWallpaper(wallpaper);
+  document.body.dataset.icons = store.get('icons') === 'white' ? 'white' : 'colour';
 
   function ready() {
     document.body.classList.add('booted');

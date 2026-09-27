@@ -670,6 +670,30 @@ blockquote { margin: 16px 0; padding: 4px 0 4px 14px; border-left: 3px solid var
 :hover > .ih-settings .k-rot { animation: ih-spin .9s ease-in-out; }
 :hover > .ih-settings .k-mid { animation: ih-pulse .3s ease-out; }
 
+/* Icon colour: soft pastels taken from the galaxy's own palette. White is the alternative (Settings). */
+.ih-about, .ih-file { --ic: #e2e8f0; }
+.ih-projects { --ic: #fcd679; }
+.ih-coolcity { --ic: #5eead4; }
+.ih-fiskal { --ic: #a5b4fc; }
+.ih-finscope { --ic: #7dd3fc; }
+.ih-ndea { --ic: #fbbf77; }
+.ih-speakup { --ic: #fda4af; }
+.ih-kupon { --ic: #86efac; }
+.ih-terminal { --ic: #d4d4d8; }
+.ih-music { --ic: #f0abfc; }
+.ih-github { --ic: #f4f4f5; }
+.ih-hf { --ic: #fde047; }
+.ih-contact { --ic: #93c5fd; }
+.ih-trash { --ic: #cbd5e1; }
+.ih-settings { --ic: #cbd5e1; }
+/* The desktop is always dark (galaxy or heat map), so colour works there in both themes. */
+body[data-icons="colour"] .d-icon .ih { color: var(--ic); }
+/* Menus and the taskbar only in dark mode; pastels would wash out on light grey. */
+:root[data-theme="dark"] body[data-icons="colour"] :is(.start, .taskbar) .ih { color: var(--ic); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body[data-icons="colour"] :is(.start, .taskbar) .ih { color: var(--ic); }
+}
+
 /* ============================================================
    Responsive
    ============================================================ */
