@@ -109,11 +109,11 @@
     el.querySelector('.wc.min').addEventListener('click', () => minimize(w));
     el.querySelector('.wc.max').addEventListener('click', () => setSnap(w, w.snap === 'max' ? null : 'max'));
     el.querySelector('.wc.close').addEventListener('click', () => close(w));
-    bar.addEventListener('dblclick', e => { if (!e.target.closest('.win-ctrl') && !mobile()) setSnap(w, w.snap === 'max' ? null : 'max'); });
+    bar.addEventListener('dblclick', e => { if (!e.target.closest('.win-ctrl')) setSnap(w, w.snap === 'max' ? null : 'max'); });
 
     // Drag
     bar.addEventListener('pointerdown', e => {
-      if (e.button !== 0 || e.target.closest('.win-ctrl') || mobile()) return;
+      if (e.button !== 0 || e.target.closest('.win-ctrl')) return;
       const sx = e.clientX, sy = e.clientY;
       let ox = w.x, oy = w.y, moved = false, snap = null;
       bar.setPointerCapture(e.pointerId);
@@ -136,7 +136,8 @@
         w.x = Math.min(a.w - 90, Math.max(-w.w + 90, ox + dx));
         w.y = Math.min(a.h - 40, Math.max(0, oy + dy));
         apply(w);
-        snap = ev.clientX <= 6 ? 'left' : ev.clientX >= window.innerWidth - 6 ? 'right' : ev.clientY <= 4 ? 'max' : null;
+        // Side snapping makes no sense on a phone; dragging to the top still maximises.
+        snap = !mobile() && ev.clientX <= 6 ? 'left' : !mobile() && ev.clientX >= window.innerWidth - 6 ? 'right' : ev.clientY <= 4 ? 'max' : null;
         showGhost(snap);
       };
       const up = () => {
@@ -202,7 +203,6 @@
       window.addEventListener('resize', () => {
         const a = area();
         wins.forEach(w => {
-          if (mobile()) { if (w.snap !== 'max') setSnap(w, 'max'); else Object.assign(w, snapRect('max')), apply(w); return; }
           if (w.snap) { Object.assign(w, snapRect(w.snap)); apply(w); return; }
           w.w = Math.min(w.w, a.w - 16); w.h = Math.min(w.h, a.h - 16);
           w.x = Math.min(Math.max(0, w.x), a.w - w.w); w.y = Math.min(Math.max(0, w.y), a.h - w.h);
@@ -246,12 +246,18 @@
         x: Math.max(a.w - ww > 620 ? 300 : 12, Math.min(a.w - ww - 12, Math.round((a.w - ww) / 2) - 60 + off)),
         y: Math.max(12, Math.min(a.h - hh - 12, Math.round((a.h - hh) / 2) - 40 + off)),
       };
+      if (mobile()) {
+        // Phones: a floating card, nearly full width, with the desktop peeking out above.
+        w.w = a.w - 20;
+        w.h = Math.min(hh, Math.round(a.h * 0.78));
+        w.x = 10;
+        w.y = Math.max(8, a.h - w.h - 10 - (off / 30) * 14);
+      }
       apply(w);
       layer.appendChild(el);
       wire(w);
       addTask(w);
       wins.set(id, w);
-      if (mobile()) setSnap(w, 'max');
       try { app.mount(el.querySelector('.win-body'), w); } catch (err) { console.error(err); el.querySelector('.win-body').textContent = 'This app failed to start.'; }
       focus(w);
       requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove('opening')));
