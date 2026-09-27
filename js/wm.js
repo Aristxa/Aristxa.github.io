@@ -259,6 +259,7 @@
       addTask(w);
       wins.set(id, w);
       try { app.mount(el.querySelector('.win-body'), w); } catch (err) { console.error(err); el.querySelector('.win-body').textContent = 'This app failed to start.'; }
+      WM.onOpen && WM.onOpen(id, app.title);
       focus(w);
       requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove('opening')));
       return w;

@@ -8,7 +8,7 @@
   // Tiles are original; glyphs are Microsoft Fluent UI System Icons (MIT). See assets/ICONS-LICENSE.txt.
   const Icons = {
     html(key, size = 40) {
-      return `<img class="ico" src="assets/icons/${key}.svg?v=4" width="${size}" height="${size}" alt="" draggable="false" />`;
+      return `<img class="ico" src="assets/icons/${key}.svg?v=5" width="${size}" height="${size}" alt="" draggable="false" />`;
     },
   };
 
