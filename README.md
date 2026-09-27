@@ -10,11 +10,11 @@ Portfolio of **Aristea Gjokthomi**, a data scientist and ML engineer, built as a
 - The **start menu has search** (`Ctrl`/`⌘` + `K`), and right-clicking the desktop opens a context menu.
 - The **terminal** has tab completion and history (`help`, `neofetch`, `plant 40`, `open fiskal`, …).
 - Every app has a **deep link**, e.g. `/#/fiskal`, `/#/coolcity`, `/#/terminal`.
-- It includes light/dark themes, reduced-motion support, and a phone layout where windows open fullscreen.
+- It includes light/dark themes, reduced-motion support, and a phone layout where windows open as draggable floating cards.
 
 It's plain HTML, CSS and JavaScript with no framework, no build step and no web fonts (it uses the visitor's OS font).
 
-App icons are [Microsoft Fluent Emoji](https://github.com/microsoft/fluentui-emoji) (MIT, see `assets/ICONS-LICENSE.txt`); the terminal and GitHub icons are hand-drawn SVGs.
+App icons are original tiles with glyphs from [Microsoft Fluent UI System Icons](https://github.com/microsoft/fluentui-system-icons) (MIT, see `assets/ICONS-LICENSE.txt`).
 
 ## Structure
 

@@ -1,12 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
   <defs>
-    <linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3f4a"/><stop offset="1" stop-color="#16181d"/></linearGradient>
-    <linearGradient id="t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5f6b"/><stop offset="1" stop-color="#40444f"/></linearGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3f47"/><stop offset="1" stop-color="#1b1d22"/></linearGradient>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#000" flood-opacity=".22"/></filter>
   </defs>
-  <rect x="8" y="14" width="80" height="68" rx="10" fill="url(#b)"/>
-  <path d="M18 14h60a10 10 0 0 1 10 10v2H8v-2a10 10 0 0 1 10-10z" fill="url(#t)"/>
-  <circle cx="18" cy="20" r="2.4" fill="#ff5f57"/><circle cx="26" cy="20" r="2.4" fill="#febc2e"/><circle cx="34" cy="20" r="2.4" fill="#28c840"/>
-  <path d="M22 42l12 9-12 9" fill="none" stroke="#5eead4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M40 62h20" stroke="#e8e8ea" stroke-width="5" stroke-linecap="round"/>
-  <rect x="8.5" y="14.5" width="79" height="67" rx="9.5" fill="none" stroke="#000" stroke-opacity=".35"/>
+  <rect x="4" y="4" width="88" height="88" rx="21" fill="url(#bg)"/>
+  <rect x="4.5" y="4.5" width="87" height="87" rx="20.5" fill="none" stroke="#fff" stroke-opacity=".28"/>
+  <rect x="4" y="4" width="88" height="88" rx="21" fill="none" stroke="#000" stroke-opacity=".12"/>
+  <g transform="translate(20 20) scale(2.8000)" fill="#e9e9ec" filter="url(#sh)"><path d="M5.64645 9.14645C5.84171 8.95118 6.15829 8.95118 6.35355 9.14645L8.35355 11.1464C8.44732 11.2402 8.5 11.3674 8.5 11.5C8.5 11.6326 8.44732 11.7598 8.35355 11.8536L6.35355 13.8536C6.15829 14.0488 5.84171 14.0488 5.64645 13.8536C5.45118 13.6583 5.45118 13.3417 5.64645 13.1464L7.29289 11.5L5.64645 9.85355C5.45118 9.65829 5.45118 9.34171 5.64645 9.14645ZM14.5 13H9.5C9.22386 13 9 13.2239 9 13.5C9 13.7761 9.22386 14 9.5 14H14.5C14.7761 14 15 13.7761 15 13.5C15 13.2239 14.7761 13 14.5 13ZM2.99609 5.5C2.99609 4.11929 4.11538 3 5.49609 3H14.4961C15.8768 3 16.9961 4.11929 16.9961 5.5V6H16.999V7H16.9961V14.5C16.9961 15.8807 15.8768 17 14.4961 17H5.49609C4.11538 17 2.99609 15.8807 2.99609 14.5V5.5ZM3.99609 7V14.5C3.99609 15.3284 4.66767 16 5.49609 16H14.4961C15.3245 16 15.9961 15.3284 15.9961 14.5V7H3.99609Z" fill="#e9e9ec"/></g>
 </svg>
