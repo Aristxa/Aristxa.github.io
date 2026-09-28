@@ -247,12 +247,12 @@
         y: Math.max(12, Math.min(a.h - hh - 12, Math.round((a.h - hh) / 2) - 40 + off)),
       };
       if (mobile()) {
-        // Phones: apps open full screen. Un-maximizing gives a floating card with the desktop peeking out above.
-        w.w = a.w - 20;
-        w.h = Math.min(hh, Math.round(a.h * 0.78));
-        w.x = 10;
-        w.y = Math.max(8, a.h - w.h - 10 - (off / 30) * 14);
-        setSnap(w, 'max');
+        // Phones: a large floating card with a margin all round and the desktop peeking out above.
+        // The maximize button makes it full screen.
+        w.w = a.w - 24;
+        w.h = Math.round(a.h * 0.86);
+        w.x = 12;
+        w.y = Math.max(12, a.h - w.h - 12 - (off / 30) * 14);
       }
       apply(w);
       layer.appendChild(el);
