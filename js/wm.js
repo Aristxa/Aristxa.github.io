@@ -4,13 +4,13 @@
 (function () {
   'use strict';
 
-  const TASKBAR_H = 52;
   const MIN_W = 320, MIN_H = 220;
   const wins = new Map();
   let layer, taskList, ghost, z = 20, cascade = 0;
 
   const mobile = () => matchMedia('(max-width: 720px)').matches;
-  const area = () => ({ w: window.innerWidth, h: window.innerHeight - TASKBAR_H });
+  const taskbarH = () => document.querySelector('.taskbar')?.offsetHeight || 48;
+  const area = () => ({ w: window.innerWidth, h: window.innerHeight - taskbarH() });
 
   const CTRL = {
     min: '<svg viewBox="0 0 12 12" width="12" height="12"><path d="M2 6.5h8" stroke="currentColor" stroke-width="1.4"/></svg>',
@@ -247,11 +247,12 @@
         y: Math.max(12, Math.min(a.h - hh - 12, Math.round((a.h - hh) / 2) - 40 + off)),
       };
       if (mobile()) {
-        // Phones: a floating card, nearly full width, with the desktop peeking out above.
+        // Phones: apps open full screen. Un-maximizing gives a floating card with the desktop peeking out above.
         w.w = a.w - 20;
         w.h = Math.min(hh, Math.round(a.h * 0.78));
         w.x = 10;
         w.y = Math.max(8, a.h - w.h - 10 - (off / 30) * 14);
+        setSnap(w, 'max');
       }
       apply(w);
       layer.appendChild(el);
