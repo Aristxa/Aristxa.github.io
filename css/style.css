@@ -511,6 +511,7 @@ blockquote { margin: 16px 0; padding: 4px 0 4px 14px; border-left: 3px solid var
 .np-menu button:hover { background: rgba(127,127,127,.15); }
 .np-text { flex: 1; margin: 0; overflow: auto; padding: 12px 14px; font-family: var(--mono); font-size: 14px; line-height: 1.5; color: var(--ink); white-space: pre; outline: none; }
 .np-text.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+.np-ln { display: block; padding-left: var(--i, 0); text-indent: calc(-1 * var(--i, 0)); }
 .np-text a { color: inherit; text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
 .np-text a:hover { color: var(--hot); text-decoration-color: currentColor; }
 .np-status { display: flex; flex: none; border-top: 1px solid var(--line); background: var(--bg-2); font-size: .74rem; color: var(--ink-2); }
@@ -682,15 +683,23 @@ body[data-icons="ice"] .d-icon .ih { color: #c9d5ff; filter: drop-shadow(0 0 6px
    ============================================================ */
 .hint-touch { display: none; }
 @media (pointer: coarse) { .hint-mouse { display: none; } .hint-touch { display: inline; } }
+/* Inputs under 16px make iOS zoom the whole page on focus. */
+@media (pointer: coarse) { .term-in, .start-search input { font-size: 16px; } }
 @media (max-width: 720px) {
-  :root { --tb: 56px; }
+  /* Keep the taskbar clear of the iPhone home indicator (the page uses viewport-fit=cover). */
+  :root { --tb: calc(56px + env(safe-area-inset-bottom, 0px)); }
+  .taskbar { padding-bottom: env(safe-area-inset-bottom, 0px); }
+  /* Bigger title-bar buttons for fingers. */
+  .win-bar { height: 44px; }
+  .wc { width: 42px; height: 36px; }
   .icons { grid-auto-flow: row; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); grid-template-rows: none; grid-auto-rows: 98px; right: 10px; overflow-y: auto; }
   .d-icon { width: auto; }
   .hide-sm { display: none !important; }
   /* Calmer wallpaper on phones. */
   #wall { filter: saturate(.8); }
   .wall-scrim { background: linear-gradient(rgba(6,7,10,.12), rgba(6,7,10,.12)); }
-  .np-text { font-size: 13px; }
+  .np-text { font-size: 13.5px; line-height: 1.6; padding: 14px 16px 20px; }
+  .np-menu button { padding: 7px 11px; font-size: .86rem; }
   /* Compact explainer pinned above the taskbar. */
   .widget { top: auto; bottom: 10px; left: 10px; right: 10px; width: auto; padding: 10px 12px; border-radius: 14px; }
   .widget .w-grid, .widget .w-info { display: none; }
@@ -717,6 +726,10 @@ body[data-icons="ice"] .d-icon .ih { color: #c9d5ff; filter: drop-shadow(0 0 6px
   .gh-list a { grid-template-columns: 1fr auto; }
   .gh-time { display: none; }
   .case-q { font-weight: 600; font-size: 1.3rem; line-height: 1.25; margin: 0 0 12px; }
+  /* SVG charts shrink with the screen; enlarge their labels so they stay readable (~10px on a phone). */
+  .pareto text { font-size: 17px; }
+  .network text, .network .stage-node text { font-size: 14.5px; }
+  .network .col, .network .carry-l { font-size: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

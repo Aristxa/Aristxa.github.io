@@ -104,7 +104,7 @@
       '',
       "Hi! I'm a data scientist. I did my MSc in Information Systems in Economics at the University of Tirana, and most of what I build sits somewhere between statistics, machine learning and actually shipping something people can use.",
       '',
-      'Stuff on this desktop (open the icons, or click a name here):',
+      'Stuff on this desktop (open the icons, or <span class="hint-mouse">click</span><span class="hint-touch">tap</span> a name here):',
       '',
       `- ${L('coolcity', 'CoolCity')}`,
       '  Where should Tirana plant its next 1,000 trees? Satellite data + LightGBM + a greedy planner.',
@@ -124,7 +124,7 @@
       `- ${L('kupon', 'Kupon')}`,
       '  Scan the QR code on any Albanian receipt and see where your money goes. Nothing leaves your phone.',
       '',
-      'Right-click the desktop and pick the CoolCity heat map wallpaper btw. You can plant trees on it.',
+      `<span class="hint-mouse">Right-click the desktop</span><span class="hint-touch">${L('settings', 'Open Settings')}</span> and pick the CoolCity heat map wallpaper btw. You can plant trees on it.`,
       '',
       "One habit I try to keep: decide how a result will be judged before looking at it. On Asistenti Fiskal my main hypothesis didn't hold up, and the README says exactly that.",
       '',
@@ -133,13 +133,21 @@
       `linkedin     <a href="https://www.linkedin.com/in/aristea-gjokthomi/" target="_blank" rel="noopener">linkedin.com/in/aristea-gjokthomi</a>`,
       `email        <a href="mailto:agjokthomii@gmail.com">agjokthomii@gmail.com</a>`,
       '',
-    ].join('\n');
+    ];
+    // One block per line so wrapped lines keep a hanging indent on narrow screens:
+    // "  text" wraps under the text, "- name" under the name, "github  link" under the link.
+    const lines = text.map(l => {
+      const lead = l.match(/^ */)[0].length;
+      const col = !lead && l.match(/^[a-z]+ +(?=<)/);
+      const ind = col ? col[0].length : lead + (l.startsWith('- ') ? 2 : 0);
+      return `<span class="np-ln"${ind ? ` style="--i:${ind}ch"` : ''}>${l || ' '}</span>`;
+    }).join('');
     b.classList.add('notepad');
     b.innerHTML = `
       <div class="np-menu">
         <button data-m="file">File</button><button data-m="edit">Edit</button><button data-m="format">Format</button><button data-m="view">View</button><button data-m="help">Help</button>
       </div>
-      <pre class="np-text wrap" tabindex="0">${text}</pre>
+      <div class="np-text wrap" tabindex="0">${lines}</div>
       <div class="np-status"><span data-pos>Ln 1, Col 1</span><span data-zoom>100%</span><span>Windows (CRLF)</span><span>UTF-8</span></div>`;
     const pre = b.querySelector('.np-text');
     let zoom = 100;
@@ -155,11 +163,12 @@
       const o = e.target.closest('[data-open]');
       if (o) { e.preventDefault(); openApp(o.dataset.open); return; }
       const sel = getSelection();
-      if (!sel.rangeCount) return;
-      const r = sel.getRangeAt(0).cloneRange();
-      r.setStart(pre, 0);
-      const before = r.toString().split('\n');
-      b.querySelector('[data-pos]').textContent = `Ln ${before.length}, Col ${before[before.length - 1].length + 1}`;
+      const ln = sel.rangeCount && sel.focusNode?.parentElement?.closest('.np-ln');
+      if (!ln) return;
+      const r = document.createRange();
+      r.setStart(ln, 0); r.setEnd(sel.focusNode, sel.focusOffset);
+      const n = [...pre.children].indexOf(ln) + 1;
+      b.querySelector('[data-pos]').textContent = `Ln ${n}, Col ${r.toString().length + 1}`;
     });
   }
 
@@ -268,7 +277,7 @@
               <button class="btn-sm" data-reset>Reset</button>
               <button class="btn-sm" data-back>Back to galaxy</button>
             </div>
-            <p class="note">Toy model for illustration. The synthetic field is not Tirana data. Minimise this window to watch, or click the wallpaper to plant trees yourself.</p>
+            <p class="note">Toy model for illustration. The synthetic field is not Tirana data. Minimise this window to watch, or <span class="hint-mouse">click</span><span class="hint-touch">tap</span> the wallpaper to plant trees yourself.</p>
           </div>`;
         const set = st => {
           el.querySelector('[data-k=mean]').textContent = st.mean.toFixed(1) + '°C';
@@ -382,7 +391,7 @@
 
   function finPipeline(el) {
     el.innerHTML = `
-      <div class="viz-head"><span class="mono dim">Medallion ETL → analytics · click a stage</span><button class="btn-sm" data-auto>▶ auto-play</button></div>
+      <div class="viz-head"><span class="mono dim">Medallion ETL → analytics · <span class="hint-mouse">click</span><span class="hint-touch">tap</span> a stage</span><button class="btn-sm" data-auto>▶ auto-play</button></div>
       <div class="pipeline"><div class="pipe-rail"><i></i></div>${FIN.map((s, i) => `<button class="stage" data-i="${i}"><span class="dot">${i + 1}</span><span class="stage-name">${s.k}</span></button>`).join('')}</div>
       <div class="pipe-detail" aria-live="polite"></div>`;
     const detail = el.querySelector('.pipe-detail');
@@ -441,7 +450,7 @@
   // ============================================================
   function network(el) {
     el.innerHTML = `
-      <div class="viz-head"><span class="mono dim">Two-stage dynamic network · hover a node</span></div>
+      <div class="viz-head"><span class="mono dim">Two-stage dynamic network · <span class="hint-mouse">hover</span><span class="hint-touch">tap</span> a node</span></div>
       <svg class="network" viewBox="0 0 600 300" role="img" aria-label="Inputs staff, branches, deposits feed stage 1, producing investments, cards and loans, which feed stage 2 producing net income and ROE, with carry-over to the next year"></svg>
       <p class="note mono">network efficiency θ = θ<sub>stage 1</sub> × θ<sub>stage 2</sub> · LPs solved per bank × year × stage</p>`;
     const svg = el.querySelector('svg');
@@ -613,7 +622,7 @@
       <div class="ex-main">
         <div class="ex-path mono">~/projects/<span data-path></span></div>
         <div class="ex-grid" role="listbox" aria-label="Projects"></div>
-        <div class="ex-info mono">Select an item · double-click to open</div>
+        <div class="ex-info mono"><span class="hint-mouse">Select an item · double-click to open</span><span class="hint-touch">Tap an item to open it</span></div>
       </div>`;
     const grid = b.querySelector('.ex-grid');
     const info = b.querySelector('.ex-info');
@@ -860,7 +869,7 @@
             <button role="radio" data-wall-set="galaxy">Galaxy</button>
             <button role="radio" data-wall-set="heat">CoolCity heat map</button>
           </div>
-          <p class="dim">The heat map is interactive: click it to plant trees, or run the greedy planner.</p>
+          <p class="dim">The heat map is interactive: <span class="hint-mouse">click</span><span class="hint-touch">tap</span> it to plant trees, or run the greedy planner.</p>
           <label class="switch"><input type="checkbox" data-anim /> <span>Animate the wallpaper</span></label>
         </section>
         <section><h4 class="mono">Desktop icon colour</h4>
