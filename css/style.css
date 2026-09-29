@@ -174,19 +174,47 @@ body[data-wall="drive"] .wall-scrim {
 .d-icon:focus-visible { outline: 1px dotted rgba(255,255,255,.7); outline-offset: -3px; }
 .d-icon span { font-size: .76rem; line-height: 1.2; font-weight: 500; text-shadow: 0 1px 3px rgba(0,0,0,.95), 0 0 12px rgba(0,0,0,.6); max-width: 100%; overflow-wrap: anywhere; }
 
-/* "Learn about this picture", shown on the NeuroDrive wallpaper only */
-.wall-about {
-  position: absolute; top: 16px; right: 16px; display: none; align-items: center; gap: 10px; padding: 8px 14px 8px 11px;
-  background: rgba(10, 11, 14, .55); color: #fff; text-align: left;
-  border: 1px solid rgba(255,255,255,.1); border-radius: 8px;
+/* NeuroDrive panel: "Learn about this picture" plus Autopilot / Drive yourself. NeuroDrive wallpaper only. */
+.drive-panel {
+  position: absolute; top: 16px; right: 16px; width: 262px; display: none; flex-direction: column; gap: 8px; padding: 8px;
+  background: rgba(10, 11, 14, .6); color: #fff;
+  border: 1px solid rgba(255,255,255,.1); border-radius: 10px;
   backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4);
 }
-body[data-wall="drive"] .wall-about { display: flex; }
-.wall-about:hover { background: rgba(10, 11, 14, .72); border-color: rgba(255,255,255,.2); }
-.wall-about span { display: flex; flex-direction: column; }
-.wall-about b { font-size: .8rem; font-weight: 500; }
-.wall-about small { font-size: .7rem; color: #aeb0b8; }
-.wall-about svg { flex: none; color: #7ab0ff; }
+body[data-wall="drive"] .drive-panel { display: flex; }
+.wa-learn { display: flex; align-items: center; gap: 10px; padding: 4px 6px; border-radius: 6px; text-align: left; color: #fff; }
+.wa-learn:hover { background: rgba(255,255,255,.07); }
+.wa-learn span { display: flex; flex-direction: column; }
+.wa-learn b { font-size: .8rem; font-weight: 500; }
+.wa-learn small { font-size: .7rem; color: #aeb0b8; }
+.wa-learn svg { flex: none; color: #7ab0ff; }
+.wa-mode { display: grid; grid-template-columns: 1fr 1fr; background: rgba(255,255,255,.06); border-radius: 7px; padding: 3px; }
+.wa-mode button { padding: 6px 4px; border-radius: 5px; font-size: .76rem; color: #bdbcc2; }
+.wa-mode button[aria-checked="true"] { background: #4f8ff7; color: #fff; }
+.wa-hud { display: flex; flex-direction: column; gap: 6px; padding: 0 4px 2px; font-size: .74rem; color: #bdbcc2; }
+.wa-hud[hidden] { display: none; }
+.wa-row { display: flex; justify-content: space-between; align-items: baseline; }
+.wa-row b { font-size: 1.15rem; color: #fff; font-weight: 500; font-variant-numeric: tabular-nums; }
+.wa-row [data-state].crashed { color: #ff4d6a; }
+.wa-row [data-state].ai { color: #7ab0ff; }
+.wa-keys { margin: 0; line-height: 1.5; }
+.wa-keys kbd { font: inherit; color: #fff; border: 0; padding: 0; background: none; box-shadow: none; }
+.wa-actions { display: flex; gap: 6px; }
+.wa-actions button { flex: 1; padding: 5px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,.14); color: #d7d6d1; font-size: .74rem; }
+.wa-actions button:hover { background: rgba(255,255,255,.07); }
+.wa-actions [data-drive-ap][aria-pressed="true"] { border-color: #4f8ff7; color: #7ab0ff; }
+/* Touch pedals: steering on the left, brake and gas on the right. */
+.drive-pad { position: absolute; left: 10px; right: 10px; bottom: 10px; display: flex; justify-content: space-between; pointer-events: none; }
+.drive-pad[hidden] { display: none; }
+.pad-group { display: flex; gap: 8px; pointer-events: auto; }
+.drive-pad button {
+  width: 64px; height: 64px; border-radius: 14px; font-size: .9rem; font-weight: 600; color: #fff;
+  background: rgba(10, 11, 14, .6); border: 1px solid rgba(255,255,255,.16);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  touch-action: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.drive-pad button.on { background: rgba(79,143,247,.55); border-color: #7ab0ff; }
+.drive-pad .gas { height: 64px; background: rgba(79,143,247,.3); }
 
 /* widget */
 .widget {
@@ -731,7 +759,11 @@ body[data-icons="ice"] .d-icon .ih { color: #c9d5ff; filter: drop-shadow(0 0 6px
   .widget .w-head { margin-bottom: 8px; }
   .widget .legend { margin-bottom: 6px; }
   .widget .w-hint { margin-bottom: 8px; }
-  .wall-about { top: auto; bottom: 10px; left: 10px; right: 10px; }
+  .drive-panel { top: auto; bottom: 10px; left: 10px; right: 10px; width: auto; }
+  /* While driving on a phone the pedals take the bottom, the panel sits above them and the icons get out of the way. */
+  body.driving .drive-panel { bottom: 84px; }
+  body.driving .wa-learn { display: none; }
+  body.driving .icons { display: none; }
   .icons { bottom: 150px; }
   .task span { display: none; }
   .task { padding: 0 9px; }

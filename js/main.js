@@ -85,6 +85,7 @@
       Galaxy.setEnabled(w === 'galaxy');
       Heat.setEnabled(w === 'heat');
       Drive.setEnabled(w === 'drive');
+      if (w !== 'drive' && Drive.mode === 'manual') OS.setDriveMode('auto');
     },
     async runPlanner(n = 25) {
       if (Heat.busy) return;
@@ -182,6 +183,66 @@
   $('#w-info').addEventListener('click', () => { const w = WM.open('coolcity'); w && w.el.querySelector('[data-t=t]')?.click(); });
   $('#wall-about').addEventListener('click', () => WM.open('neurodrive'));
 
+  // ---------- NeuroDrive: autopilot (default) or drive yourself ----------
+  // Manual mode is never remembered, so every visit starts with the calm autopilot tour.
+  const panel = $('#drive-panel'), pad = $('#drive-pad'), hud = panel.querySelector('.wa-hud');
+  const apBtn = panel.querySelector('[data-drive-ap]'), stateEl = panel.querySelector('[data-state]'), kmhEl = panel.querySelector('[data-kmh]');
+  let wheel = false; // keys steer only after a click on the map or the panel, so they still work in windows
+  function setDriveMode(m) {
+    if (m === 'manual' && !Drive.ok) return; // no canvas: nothing to drive
+    if (m === 'manual' && wallpaper !== 'drive') OS.setWallpaper('drive');
+    Drive.setMode(m);
+    const on = Drive.mode === 'manual';
+    panel.querySelectorAll('[data-drive-mode]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.driveMode === Drive.mode)));
+    hud.hidden = !on;
+    pad.hidden = !on || !coarse;
+    document.body.classList.toggle('driving', on);
+    wheel = on;
+    if (on) { WM.minimizeAll(); document.activeElement?.blur(); }
+  }
+  OS.setDriveMode = setDriveMode;
+  Drive.onHud(h => {
+    if (!h) return;
+    kmhEl.textContent = h.kmh;
+    stateEl.textContent = h.crashed ? 'crashed, restarting…' : h.autopilot ? 'autopilot driving' : !wheel && !coarse ? 'click the map to drive' : 'you are driving';
+    stateEl.className = h.crashed ? 'crashed' : h.autopilot ? 'ai' : '';
+    apBtn.textContent = `Autopilot: ${h.autopilot ? 'on' : 'off'}`;
+    apBtn.setAttribute('aria-pressed', String(h.autopilot));
+  });
+  panel.addEventListener('click', e => {
+    const m = e.target.closest('[data-drive-mode]');
+    if (m) setDriveMode(m.dataset.driveMode);
+    if (e.target.closest('[data-drive-ap]')) Drive.toggleAutopilot();
+    if (e.target.closest('[data-drive-reset]')) Drive.restart();
+  });
+  const KEYS = { ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right' };
+  const releaseAll = () => Object.keys(Drive.input).forEach(k => (Drive.input[k] = false));
+  const typing = () => { const a = document.activeElement; return !!a && a !== document.body && (a.matches('input, textarea, select, iframe, [contenteditable]') || !!a.closest('.win, .start')); };
+  document.addEventListener('keydown', e => {
+    if (Drive.mode !== 'manual' || !wheel || typing() || e.ctrlKey || e.metaKey || e.altKey) return;
+    const k = KEYS[e.code];
+    if (k) { Drive.input[k] = true; e.preventDefault(); }
+    else if (e.code === 'KeyP' && !e.repeat) Drive.toggleAutopilot();
+    else if (e.code === 'KeyR' && !e.repeat) Drive.restart();
+  });
+  document.addEventListener('keyup', e => { const k = KEYS[e.code]; if (k) Drive.input[k] = false; });
+  window.addEventListener('blur', releaseAll);
+  document.addEventListener('pointerdown', e => {
+    if (Drive.mode !== 'manual') return;
+    wheel = isWall(e.target) || !!e.target.closest('#drive-panel, #drive-pad');
+    if (!wheel) releaseAll();
+  }, true);
+  pad.querySelectorAll('[data-key]').forEach(b => {
+    const set = on => { Drive.input[b.dataset.key] = on; b.classList.toggle('on', on); };
+    b.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      set(true);
+      try { b.setPointerCapture(e.pointerId); } catch (err) {} // keeps the pedal held if the finger slides off
+    });
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(t => b.addEventListener(t, () => set(false)));
+  });
+  pad.addEventListener('contextmenu', e => e.preventDefault());
+
   // ---------- start menu ----------
   const start = $('#start');
   const startBtn = $('#start-btn');
@@ -190,6 +251,8 @@
   const pinned = $('#start-pinned');
   const ACTIONS = [
     { label: 'Wallpaper: NeuroDrive city', hint: 'wallpaper', run: () => OS.setWallpaper('drive') },
+    { label: 'Drive a car yourself', hint: 'NeuroDrive', run: () => OS.setDriveMode('manual') },
+    { label: 'Back to autopilot', hint: 'NeuroDrive', run: () => OS.setDriveMode('auto') },
     { label: 'Wallpaper: galaxy', hint: 'wallpaper', run: () => OS.setWallpaper('galaxy') },
     { label: 'Wallpaper: CoolCity heat map', hint: 'wallpaper', run: () => OS.setWallpaper('heat') },
     { label: 'Run greedy tree planner', hint: 'CoolCity', run: () => OS.runPlanner() },
@@ -276,6 +339,7 @@
     ['Wallpaper: galaxy', () => OS.setWallpaper('galaxy')],
     ['Wallpaper: CoolCity heat map', () => OS.setWallpaper('heat')],
     null,
+    ['Drive a car yourself', () => OS.setDriveMode('manual')],
     ['Open Terminal', () => WM.open('terminal')],
     ['Open Projects', () => WM.open('projects')],
     null,

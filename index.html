@@ -18,7 +18,7 @@
   <link rel="canonical" href="https://aristxa.github.io/" />
   <meta name="theme-color" content="#0b0c0f" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='4' y='4' width='11' height='11' rx='2' fill='%23ff9a3c'/><rect x='17' y='4' width='11' height='11' rx='2' fill='%23d23f2a'/><rect x='4' y='17' width='11' height='11' rx='2' fill='%230e9f8b'/><rect x='17' y='17' width='11' height='11' rx='2' fill='%235eead4'/></svg>" />
-  <link rel="stylesheet" href="css/style.css?v=17" />
+  <link rel="stylesheet" href="css/style.css?v=18" />
   <script>
     try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}
   </script>
@@ -59,11 +59,27 @@
 
     <div id="icons" class="icons" role="list" aria-label="Desktop"></div>
 
-    <!-- Like Windows Spotlight's "Learn about this picture", for the NeuroDrive wallpaper -->
-    <button id="wall-about" class="wall-about" title="Open NeuroDrive">
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.34 19a10 10 0 1 1 17.32 0"/><path d="m12 14 4-4"/></svg>
-      <span><b>Learn about this picture</b><small>Self-driving cars, one neural network</small></span>
-    </button>
+    <!-- NeuroDrive wallpaper panel: "Learn about this picture" (like Windows Spotlight) plus the driving mode -->
+    <div id="drive-panel" class="drive-panel">
+      <button id="wall-about" class="wa-learn" title="Open NeuroDrive">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.34 19a10 10 0 1 1 17.32 0"/><path d="m12 14 4-4"/></svg>
+        <span><b>Learn about this picture</b><small>Self-driving cars, one neural network</small></span>
+      </button>
+      <div class="wa-mode" role="radiogroup" aria-label="Driving mode">
+        <button role="radio" aria-checked="true" data-drive-mode="auto">Autopilot</button>
+        <button role="radio" aria-checked="false" data-drive-mode="manual">Drive yourself</button>
+      </div>
+      <div class="wa-hud mono" hidden>
+        <div class="wa-row"><span><b data-kmh>0</b> km/h</span><span data-state>manual</span></div>
+        <p class="wa-keys hint-mouse"><kbd>WASD</kbd>/<kbd>arrows</kbd> drive · <kbd>P</kbd> autopilot · <kbd>R</kbd> restart</p>
+        <div class="wa-actions"><button data-drive-ap>Autopilot: off</button><button data-drive-reset>Restart</button></div>
+      </div>
+    </div>
+    <!-- Touch pedals and steering, shown on phones while driving -->
+    <div id="drive-pad" class="drive-pad" hidden>
+      <div class="pad-group"><button data-key="left" aria-label="Steer left">◀</button><button data-key="right" aria-label="Steer right">▶</button></div>
+      <div class="pad-group"><button data-key="down" aria-label="Brake">Brake</button><button data-key="up" class="gas" aria-label="Accelerate">Gas</button></div>
+    </div>
 
     <aside class="widget mono" aria-label="CoolCity wallpaper model">
       <div class="w-head">
@@ -130,14 +146,14 @@
   <div id="ctx" class="ctx" role="menu" hidden></div>
   <div id="toast" class="toast mono" role="status"></div>
 
-  <script src="js/vendor/daedalos-galaxy.js?v=17"></script>
-  <script src="js/galaxy.js?v=17"></script>
-  <script src="js/heat.js?v=17"></script>
-  <script src="js/vendor/neurodrive.js?v=17"></script>
-  <script src="js/drive.js?v=17"></script>
-  <script src="js/apps.js?v=17"></script>
-  <script src="js/terminal.js?v=17"></script>
-  <script src="js/wm.js?v=17"></script>
-  <script src="js/main.js?v=17"></script>
+  <script src="js/vendor/daedalos-galaxy.js?v=18"></script>
+  <script src="js/galaxy.js?v=18"></script>
+  <script src="js/heat.js?v=18"></script>
+  <script src="js/vendor/neurodrive.js?v=18"></script>
+  <script src="js/drive.js?v=18"></script>
+  <script src="js/apps.js?v=18"></script>
+  <script src="js/terminal.js?v=18"></script>
+  <script src="js/wm.js?v=18"></script>
+  <script src="js/main.js?v=18"></script>
 </body>
 </html>

@@ -588,14 +588,15 @@
               <li><b>Fast collision checks</b>: a uniform spatial hash, so each car only tests the road edges near it, and allocation-free ray casting on typed arrays.</li>
             </ul>
             <h4 class="mono">The wallpaper</h4>
-            <p>The desktop behind this window runs the real engine: four cars share one pretrained brain on the Downtown map. There's no traffic, because the brain was trained without it.
+            <p>The desktop behind this window runs the real engine: four cars share one pretrained brain on the Downtown map. There's no traffic, because the brain was trained without it. Switch the panel to <b>Drive yourself</b> to get your own car, and press P to hand it to the same brain.
             On its own it drove Downtown for a simulated hour without crashing, but with traffic it still crashes within a minute or so. Robustness to traffic is the next thing to train.</p>
             <p class="built">Built with vanilla JavaScript and Canvas 2D. No framework, no ML library, no dependencies.</p>
             <div class="row-links"><button class="btn-sm primary" data-go="l">Try it here →</button><a class="btn-sm" href="https://aristxa.github.io/neurodrive/" target="_blank" rel="noopener">Open full screen ↗</a><a class="btn-sm" href="https://github.com/Aristxa/neurodrive" target="_blank" rel="noopener">Source ↗</a></div>
-            <div class="row-links"><button class="btn-sm" data-wall="drive">Use as wallpaper</button><button class="btn-sm" data-wall="galaxy">Switch to galaxy</button></div>
+            <div class="row-links"><button class="btn-sm" data-drive>Drive a car on the wallpaper</button><button class="btn-sm" data-wall="drive">Use as wallpaper</button><button class="btn-sm" data-wall="galaxy">Switch to galaxy</button></div>
           </div>`;
         el.querySelector('[data-go]').addEventListener('click', () => b.querySelector('[data-t=l]').click());
         el.querySelectorAll('[data-wall]').forEach(x => x.addEventListener('click', () => OS.setWallpaper(x.dataset.wall)));
+        el.querySelector('[data-drive]').addEventListener('click', () => OS.setDriveMode('manual'));
       } },
       { id: 'l', label: 'Live', flush: true, render: el => live(el, 'https://aristxa.github.io/neurodrive/', { wake: false, title: 'NeuroDrive' }) },
     ]);

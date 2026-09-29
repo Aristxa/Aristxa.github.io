@@ -5,6 +5,7 @@ Portfolio of **Aristea Gjokthomi**, a data scientist and ML engineer, built as a
 **Live:** https://aristxa.github.io
 
 - The default **wallpaper is [NeuroDrive](https://github.com/Aristxa/neurodrive)**: four self-driving cars touring a city, all driven by one pretrained neural network, running on the real engine.
+- Switch its panel from **Autopilot** to **Drive yourself** to get your own car: WASD/arrows on a keyboard, touch pedals on a phone, `P` to hand the wheel to the neural network, `R` to restart. Manual mode is never remembered, so every visit starts with the calm autopilot tour.
 - Switch it (right-click the desktop or Settings) to the **daedalOS galaxy** (WebGL), which turns slowly and tilts with the mouse, or to a **live toy CoolCity heat map**: hover to cast shade, click to plant a tree, or run the lazy-greedy planner.
 - Drag on the desktop to **rubber-band select** icons, like a real PC.
 - There is **one app per project**, each with an interactive view of its real published results. The Hugging Face Spaces run live inside the windows.
