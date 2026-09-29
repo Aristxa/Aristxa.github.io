@@ -12,6 +12,6 @@ The animated line icons in `js/apps.js` (with their hover animations in `css/sty
 [itshover](https://github.com/itshover/itshover), converted from React/motion components to plain SVG and CSS.
 Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0
 
-## Kupon and Guxo
+## NeuroDrive, Kupon and Guxo
 
-The Live tabs embed Kupon and Guxo from their own repositories (`Aristxa/KUPON`, `Aristxa/Speak-UP`), each with its own notices.
+`js/vendor/neurodrive.js` is the engine from `Aristxa/neurodrive` (MIT, same author). The Live tabs embed NeuroDrive, Kupon and Guxo from their own repositories (`Aristxa/neurodrive`, `Aristxa/KUPON`, `Aristxa/Speak-UP`), each with its own notices.

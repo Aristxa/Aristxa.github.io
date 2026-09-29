@@ -13,6 +13,7 @@
     about: { vb: 24, g: FILE },
     file: { vb: 24, g: FILE },
     projects: { vb: 24, g: '<path class="p-top" d="M12 6l-8 4l8 4l8 -4l-8 -4"/><path class="p-bot" d="M4 14l8 4l8 -4"/>' },
+    neurodrive: { vb: 24, g: '<path d="M3.34 19a10 10 0 1 1 17.32 0"/><path class="d-needle" d="m12 14 4-4"/>' },
     coolcity: { vb: 24, g: '<path class="c-dish" d="M4 10a7.31 7.31 0 0 0 10 10Z"/><path d="m9 15 3-3"/><path class="c-in" d="M17 13a6 6 0 0 0-6-6"/><path class="c-out" d="M21 13A10 10 0 0 0 11 3"/>' },
     fiskal: { vb: 48, cap: 'square', g: '<path d="M24 40.5V41L24 10V10.5"/><path d="M24 41C31.0005 36.9995 37.9995 36.9995 45 41V10.0003C37.9995 5.99989 31.0005 5.99989 24 10.0003C16.9995 5.99989 10.0005 5.99989 3 10.0003V41C10.0005 36.9995 16.9995 36.9995 24 41Z"/><path class="ih-draw b-1" pathLength="1" d="M30 16.5C32.8362 15.1345 36.5662 15.06 39.5 16.2763"/><path class="ih-draw b-2" pathLength="1" d="M30 23.5832C32.8362 22.2178 36.5662 22.1432 39.5 23.3596"/><path class="ih-draw b-3" pathLength="1" d="M30 30.6665C32.8362 29.301 36.5662 29.2265 39.5 30.4428"/>' },
     finscope: { vb: 24, g: '<path class="f-base" d="M4 19l16 0"/><path class="ih-draw f-line" pathLength="1" d="M4 15l4 -6l4 2l4 -5l4 4"/>' },
@@ -105,6 +106,9 @@
       "Hi! I'm a data scientist. I did my MSc in Information Systems in Economics at the University of Tirana, and most of what I build sits somewhere between statistics, machine learning and actually shipping something people can use.",
       '',
       'Stuff on this desktop (open the icons, or <span class="hint-mouse">click</span><span class="hint-touch">tap</span> a name here):',
+      '',
+      `- ${L('neurodrive', 'NeuroDrive')}`,
+      '  A mini Tesla in the browser: draw a city, and neural-network cars teach themselves to drive it. The wallpaper behind this window is its pretrained brain driving.',
       '',
       `- ${L('coolcity', 'CoolCity')}`,
       '  Where should Tirana plant its next 1,000 trees? Satellite data + LightGBM + a greedy planner.',
@@ -558,6 +562,46 @@
   }
 
   // ============================================================
+  // NeuroDrive
+  // ============================================================
+  function mountNeuroDrive(b) {
+    tabs(b, [
+      { id: 'o', label: 'Overview', render: el => {
+        el.innerHTML = `
+          <div class="case">
+            <h2 class="case-q">NeuroDrive: build a city, then watch neural networks learn to drive it.</h2>
+            <p>A self-driving car simulator written from scratch in plain JavaScript, with no ML library and no build step. You draw a road network and it becomes a city with lanes,
+            crosswalks, buildings and trees. Then 150+ cars, each run by its own small neural network, learn to drive it through neuro-evolution.
+            Once a brain is good enough, you can drive through traffic yourself and hand it the wheel.</p>
+            <table class="facts"><tbody>
+              <tr><td class="n">254</td><td>weights per brain: 10 → 12 → 8 → 2, tanh. 9 sensor rays plus speed in, throttle and steering out</td></tr>
+              <tr><td class="n">153°</td><td>arc covered by the 9 ray-cast sensors, which see road borders and traffic</td></tr>
+              <tr><td class="n">30×</td><td>real time, on a fixed 60 Hz step with a CPU budget, so it never falls behind</td></tr>
+              <tr><td class="n">2–3 min</td><td>to train 200 cars for 80 generations headlessly in Node, with the same engine code</td></tr>
+            </tbody></table>
+            <h4 class="mono">How it learns</h4>
+            <ul class="bul">
+              <li><b>Fitness is unique road checkpoints</b>, not distance, so circling or wiggling in place earns nothing. Cars that stop making progress for 3.5 s are retired.</li>
+              <li><b>Genetic algorithm</b>: the top 4% survive unchanged, parents are picked by tournament, and crossover works per neuron, so a neuron's bias and incoming weights are inherited together.</li>
+              <li><b>Fair comparison</b>: every generation faces the same seeded traffic, unless you turn on "vary traffic" to train for robustness.</li>
+              <li><b>Car physics</b>: a kinematic bicycle model with a grip limit, so cars can't take corners unrealistically fast.</li>
+              <li><b>Fast collision checks</b>: a uniform spatial hash, so each car only tests the road edges near it, and allocation-free ray casting on typed arrays.</li>
+            </ul>
+            <h4 class="mono">The wallpaper</h4>
+            <p>The desktop behind this window runs the real engine: four cars share one pretrained brain on the Downtown map. There's no traffic, because the brain was trained without it.
+            On its own it drove Downtown for a simulated hour without crashing, but with traffic it still crashes within a minute or so. Robustness to traffic is the next thing to train.</p>
+            <p class="built">Built with vanilla JavaScript and Canvas 2D. No framework, no ML library, no dependencies.</p>
+            <div class="row-links"><button class="btn-sm primary" data-go="l">Try it here →</button><a class="btn-sm" href="https://aristxa.github.io/neurodrive/" target="_blank" rel="noopener">Open full screen ↗</a><a class="btn-sm" href="https://github.com/Aristxa/neurodrive" target="_blank" rel="noopener">Source ↗</a></div>
+            <div class="row-links"><button class="btn-sm" data-wall="drive">Use as wallpaper</button><button class="btn-sm" data-wall="galaxy">Switch to galaxy</button></div>
+          </div>`;
+        el.querySelector('[data-go]').addEventListener('click', () => b.querySelector('[data-t=l]').click());
+        el.querySelectorAll('[data-wall]').forEach(x => x.addEventListener('click', () => OS.setWallpaper(x.dataset.wall)));
+      } },
+      { id: 'l', label: 'Live', flush: true, render: el => live(el, 'https://aristxa.github.io/neurodrive/', { wake: false, title: 'NeuroDrive' }) },
+    ]);
+  }
+
+  // ============================================================
   // Kupon
   // ============================================================
   function mountKupon(b) {
@@ -600,6 +644,7 @@
   // Explorer
   // ============================================================
   const FILES = [
+    { f: 'flagship', icon: 'neurodrive', name: 'NeuroDrive', meta: 'JavaScript · neuro-evolution · Canvas', open: 'neurodrive', url: 'https://github.com/Aristxa/neurodrive' },
     { f: 'flagship', icon: 'coolcity', name: 'CoolCity Tirana', meta: 'Python · LightGBM · optimisation', open: 'coolcity' },
     { f: 'flagship', icon: 'fiskal', name: 'Asistenti Fiskal', meta: 'Python · RAG · Gradio', open: 'fiskal' },
     { f: 'flagship', icon: 'finscope', name: 'FinScope', meta: 'Python · FastAPI · forecasting', open: 'finscope' },
@@ -866,10 +911,11 @@
         </section>
         <section><h4 class="mono">Wallpaper</h4>
           <div class="seg" role="radiogroup" aria-label="Wallpaper">
+            <button role="radio" data-wall-set="drive">NeuroDrive city</button>
             <button role="radio" data-wall-set="galaxy">Galaxy</button>
             <button role="radio" data-wall-set="heat">CoolCity heat map</button>
           </div>
-          <p class="dim">The heat map is interactive: <span class="hint-mouse">click</span><span class="hint-touch">tap</span> it to plant trees, or run the greedy planner.</p>
+          <p class="dim">The city is NeuroDrive: four cars driven by one pretrained neural network. The heat map is interactive: <span class="hint-mouse">click</span><span class="hint-touch">tap</span> it to plant trees, or run the greedy planner.</p>
           <label class="switch"><input type="checkbox" data-anim /> <span>Animate the wallpaper</span></label>
         </section>
         <section><h4 class="mono">Desktop icon colour</h4>
@@ -907,6 +953,7 @@
   const LIST = [
     { id: 'about', title: 'about_me.txt - Notepad', icon: 'about', label: 'about_me.txt', w: 700, h: 600, mount: mountAbout, desc: 'Who I am and how I work' },
     { id: 'projects', title: 'Projects', icon: 'projects', label: 'Projects', w: 700, h: 470, mount: mountExplorer, desc: 'Browse every project' },
+    { id: 'neurodrive', title: 'NeuroDrive', icon: 'neurodrive', label: 'NeuroDrive', w: 800, h: 680, mount: mountNeuroDrive, desc: 'Self-driving car simulator' },
     { id: 'coolcity', title: 'CoolCity Tirana', icon: 'coolcity', label: 'CoolCity', w: 720, h: 640, mount: mountCoolCity, desc: 'Where to plant 1,000 trees' },
     { id: 'fiskal', title: 'Asistenti Fiskal', icon: 'fiskal', label: 'Asistenti Fiskal', w: 740, h: 660, mount: mountFiskal, desc: 'Citation-bound legal RAG' },
     { id: 'finscope', title: 'FinScope', icon: 'finscope', label: 'FinScope', w: 760, h: 640, mount: mountFinScope, desc: 'SEC EDGAR analytics platform' },
