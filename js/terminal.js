@@ -102,6 +102,10 @@
       return [`mean ${s.mean.toFixed(2)}°C · max ${s.max.toFixed(1)}°C · trees ${s.trees} · cooled ${OS.fmtCool(s.delta)}`];
     } },
     reset: { d: 'clear planted trees', run: () => { Heat.reset(); return ['trees cleared']; } },
+    drive: { d: 'drive a car on the wallpaper: drive | drive auto', run: a => {
+      OS.setDriveMode(a[0] === 'auto' ? 'auto' : 'manual');
+      return [OS.wallpaper() === 'drive' && a[0] !== 'auto' ? 'your car is on the map: click it, then WASD or arrows. P = autopilot' : 'autopilot tour'];
+    } },
     wallpaper: { d: 'wallpaper drive|galaxy|heat', run: a => {
       if (!['drive', 'galaxy', 'heat'].includes(a[0])) return [`current: ${OS.wallpaper()}. usage: wallpaper drive|galaxy|heat`];
       OS.setWallpaper(a[0]); return [`wallpaper → ${OS.wallpaper()}`];
