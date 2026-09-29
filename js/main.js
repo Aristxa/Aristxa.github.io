@@ -39,7 +39,9 @@
   };
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const coarse = matchMedia('(pointer: coarse)').matches;
-  let wallpaper = store.get('wallpaper') === 'heat' ? 'heat' : 'galaxy';
+  // New key: NeuroDrive became the default, and the old one stored 'galaxy' for every past visitor.
+  const WALLS = ['drive', 'galaxy', 'heat'];
+  let wallpaper = WALLS.includes(store.get('wall')) ? store.get('wall') : 'drive';
 
   // ---------- theme ----------
   function applyTheme(pref) {
@@ -69,17 +71,20 @@
     themePref,
     setTheme(p) { store.set('theme', p); applyTheme(p); },
     toggleTheme() { OS.setTheme(effectiveTheme() === 'dark' ? 'light' : 'dark'); },
-    setAnimated(on) { store.set('anim', on ? '1' : '0'); Heat.setAnimated(on); Galaxy.setAnimated(on); },
+    setAnimated(on) { store.set('anim', on ? '1' : '0'); Heat.setAnimated(on); Galaxy.setAnimated(on); Drive.setAnimated(on); },
     iconStyle: () => document.body.dataset.icons,
     setIconStyle(v) { store.set('icons', v); document.body.dataset.icons = v; },
     wallpaper: () => wallpaper,
     setWallpaper(w) {
+      if (!WALLS.includes(w)) w = 'drive';
+      if (w === 'drive' && !Drive.ok) w = 'galaxy';
       if (w === 'galaxy' && !Galaxy.ok) w = 'heat'; // no WebGL: the heat map always works
       wallpaper = w;
-      store.set('wallpaper', w);
+      store.set('wall', w);
       document.body.dataset.wall = w;
       Galaxy.setEnabled(w === 'galaxy');
       Heat.setEnabled(w === 'heat');
+      Drive.setEnabled(w === 'drive');
     },
     async runPlanner(n = 25) {
       if (Heat.busy) return;
@@ -101,7 +106,7 @@
   window.OS = OS;
 
   // ---------- desktop icons ----------
-  const DESKTOP = ['about', 'projects', 'coolcity', 'fiskal', 'finscope', 'ndea', 'speakup', 'kupon', 'terminal', 'music', 'github', 'hf', 'contact', 'trash'];
+  const DESKTOP = ['about', 'projects', 'neurodrive', 'coolcity', 'fiskal', 'finscope', 'ndea', 'speakup', 'kupon', 'terminal', 'music', 'github', 'hf', 'contact', 'trash'];
   const iconsEl = $('#icons');
   iconsEl.innerHTML = DESKTOP.map(id => {
     const a = Apps.get(id);
@@ -118,10 +123,11 @@
 
   // ---------- wallpaper interaction ----------
   const desktop = $('#desktop');
-  const isWall = t => t === desktop || ['icons', 'windows', 'galaxy', 'wall'].includes(t.id) || t.classList.contains('wall-scrim');
+  const isWall = t => t === desktop || ['icons', 'windows', 'galaxy', 'wall', 'drive'].includes(t.id) || t.classList.contains('wall-scrim');
   let lastShade = 0;
   document.addEventListener('pointermove', e => {
     if (wallpaper === 'galaxy') { Galaxy.look(e.clientX / innerWidth * 2 - 1, e.clientY / innerHeight * 2 - 1); return; }
+    if (wallpaper !== 'heat') return;
     if (!isWall(e.target) || document.body.classList.contains('is-dragging')) return;
     const now = performance.now();
     if (now - lastShade < 16) return;
@@ -174,6 +180,7 @@
   $('#w-run').addEventListener('click', () => OS.runPlanner());
   $('#w-reset').addEventListener('click', () => Heat.reset());
   $('#w-info').addEventListener('click', () => { const w = WM.open('coolcity'); w && w.el.querySelector('[data-t=t]')?.click(); });
+  $('#wall-about').addEventListener('click', () => WM.open('neurodrive'));
 
   // ---------- start menu ----------
   const start = $('#start');
@@ -182,6 +189,7 @@
   const sList = $('#start-results');
   const pinned = $('#start-pinned');
   const ACTIONS = [
+    { label: 'Wallpaper: NeuroDrive city', hint: 'wallpaper', run: () => OS.setWallpaper('drive') },
     { label: 'Wallpaper: galaxy', hint: 'wallpaper', run: () => OS.setWallpaper('galaxy') },
     { label: 'Wallpaper: CoolCity heat map', hint: 'wallpaper', run: () => OS.setWallpaper('heat') },
     { label: 'Run greedy tree planner', hint: 'CoolCity', run: () => OS.runPlanner() },
@@ -191,7 +199,7 @@
     { label: 'Reboot AristeaOS', hint: 'system', run: () => OS.reboot() },
   ];
   // All apps, A to Z, with the projects grouped in a folder like Windows 10.
-  const PROJECT_IDS = ['coolcity', 'fiskal', 'finscope', 'ndea', 'speakup', 'kupon'];
+  const PROJECT_IDS = ['neurodrive', 'coolcity', 'fiskal', 'finscope', 'ndea', 'speakup', 'kupon'];
   const FOLDER = '<svg class="folder-ico" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M2 6.5A1.5 1.5 0 0 1 3.5 5h5.4l2 2h9.6A1.5 1.5 0 0 1 22 8.5V18a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18z" fill="#e8a92c"/><path d="M2 9.5h20V18a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18z" fill="#f7c948"/></svg>';
   const CHEV = '<svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
   const byLabel = (a, b) => a.label.localeCompare(b.label, 'en', { sensitivity: 'base' });
@@ -264,6 +272,7 @@
   // ---------- context menu ----------
   const ctx = $('#ctx');
   const CTX = [
+    ['Wallpaper: NeuroDrive city', () => OS.setWallpaper('drive')],
     ['Wallpaper: galaxy', () => OS.setWallpaper('galaxy')],
     ['Wallpaper: CoolCity heat map', () => OS.setWallpaper('heat')],
     null,
@@ -318,6 +327,7 @@
   const animated = !reduced && store.get('anim') !== '0';
   Galaxy.init($('#galaxy'), { animated, enabled: false });
   Heat.init($('#wall'), { animated, enabled: false });
+  Drive.init($('#drive'), { animated, enabled: false });
   OS.setWallpaper(wallpaper);
   document.body.dataset.icons = ['white', 'ice'].includes(store.get('icons')) ? store.get('icons') : 'starlight';
 

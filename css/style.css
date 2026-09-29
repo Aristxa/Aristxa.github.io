@@ -130,10 +130,11 @@ body.shutting-down .desktop, body.shutting-down .taskbar { transition: opacity .
    Desktop
    ============================================================ */
 .desktop { position: fixed; inset: 0 0 var(--tb) 0; overflow: hidden; }
-#wall, #galaxy { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
+#wall, #galaxy, #drive { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
 #wall { cursor: crosshair; }
 #galaxy { background: #030305; }
-body[data-wall="heat"] #wall, body[data-wall="galaxy"] #galaxy { display: block; }
+body[data-wall="heat"] #wall, body[data-wall="galaxy"] #galaxy, body[data-wall="drive"] #drive { display: block; }
+#drive { background: #16191e; }
 /* The scrim, widget and crosshair belong to the interactive heat map only. */
 body:not([data-wall="heat"]) .wall-scrim, body:not([data-wall="heat"]) .widget { display: none; }
 .rubber { position: absolute; display: none; pointer-events: none; z-index: 1; border: 1px solid rgba(96,165,250,.85); background: rgba(96,165,250,.16); }
@@ -147,6 +148,13 @@ body:not([data-wall="heat"]) .wall-scrim, body:not([data-wall="heat"]) .widget {
   cursor: crosshair;
 }
 body[data-wall="heat"] .icons { cursor: crosshair; }
+/* NeuroDrive: darken behind the icon column and the edges so labels stay readable over the buildings. */
+body[data-wall="drive"] .wall-scrim {
+  display: block; cursor: default;
+  background:
+    linear-gradient(90deg, rgba(8,9,12,.62), rgba(8,9,12,.3) 190px, rgba(8,9,12,0) 320px),
+    radial-gradient(ellipse at 55% 45%, rgba(0,0,0,0) 50%, rgba(0,0,0,.4) 100%);
+}
 .icons {
   position: absolute; top: 14px; left: 10px; bottom: 14px;
   display: grid; grid-auto-flow: column; grid-template-rows: repeat(auto-fill, 98px); grid-auto-columns: 92px; gap: 4px 6px;
@@ -165,6 +173,20 @@ body[data-wall="heat"] .icons { cursor: crosshair; }
 .d-icon { -webkit-tap-highlight-color: transparent; }
 .d-icon:focus-visible { outline: 1px dotted rgba(255,255,255,.7); outline-offset: -3px; }
 .d-icon span { font-size: .76rem; line-height: 1.2; font-weight: 500; text-shadow: 0 1px 3px rgba(0,0,0,.95), 0 0 12px rgba(0,0,0,.6); max-width: 100%; overflow-wrap: anywhere; }
+
+/* "Learn about this picture", shown on the NeuroDrive wallpaper only */
+.wall-about {
+  position: absolute; top: 16px; right: 16px; display: none; align-items: center; gap: 10px; padding: 8px 14px 8px 11px;
+  background: rgba(10, 11, 14, .55); color: #fff; text-align: left;
+  border: 1px solid rgba(255,255,255,.1); border-radius: 8px;
+  backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4);
+}
+body[data-wall="drive"] .wall-about { display: flex; }
+.wall-about:hover { background: rgba(10, 11, 14, .72); border-color: rgba(255,255,255,.2); }
+.wall-about span { display: flex; flex-direction: column; }
+.wall-about b { font-size: .8rem; font-weight: 500; }
+.wall-about small { font-size: .7rem; color: #aeb0b8; }
+.wall-about svg { flex: none; color: #7ab0ff; }
 
 /* widget */
 .widget {
@@ -653,6 +675,9 @@ blockquote { margin: 16px 0; padding: 4px 0 4px 14px; border-left: 3px solid var
 :hover > .ih-kupon .q-in { animation: ih-fade-in .3s ease-out .45s both; }
 :hover > .ih-kupon .q-dot { animation: ih-pop .3s ease-out .75s both; }
 :hover > .ih-kupon .q-scan { animation: ih-scan 1.5s ease-in-out .6s infinite; }
+@keyframes ih-needle { 25% { transform: rotate(45deg); } 50% { transform: rotate(-20deg); } 75% { transform: rotate(30deg); } }
+.ih-neurodrive .d-needle { transform-box: view-box; transform-origin: 12px 14px; }
+:hover > .ih-neurodrive .d-needle { animation: ih-needle .8s ease-in-out; }
 @keyframes ih-blink { 25%, 75% { opacity: 0; } 0%, 50%, 100% { opacity: 1; } }
 @keyframes ih-nudge-r { 50% { transform: translateX(2px); } }
 :hover > .ih-terminal .t-cur { animation: ih-blink .8s ease-in-out; }
@@ -706,6 +731,7 @@ body[data-icons="ice"] .d-icon .ih { color: #c9d5ff; filter: drop-shadow(0 0 6px
   .widget .w-head { margin-bottom: 8px; }
   .widget .legend { margin-bottom: 6px; }
   .widget .w-hint { margin-bottom: 8px; }
+  .wall-about { top: auto; bottom: 10px; left: 10px; right: 10px; }
   .icons { bottom: 150px; }
   .task span { display: none; }
   .task { padding: 0 9px; }

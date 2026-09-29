@@ -35,6 +35,7 @@
     },
   };
   const PROJECTS = {
+    neurodrive: 'NeuroDrive: neural-network cars learn to drive a city you draw. Genetic algorithm, ray-cast sensors, zero dependencies.',
     coolcity: 'CoolCity Tirana: satellite ML + greedy planner. +37% cooling vs. best rule.',
     fiskal: 'Asistenti Fiskal: citation-bound RAG over Albanian tax law. 60-Q benchmark.',
     finscope: 'FinScope: SEC EDGAR → star schema → 5-model forecasting + anomaly detection.',
@@ -101,8 +102,8 @@
       return [`mean ${s.mean.toFixed(2)}°C · max ${s.max.toFixed(1)}°C · trees ${s.trees} · cooled ${OS.fmtCool(s.delta)}`];
     } },
     reset: { d: 'clear planted trees', run: () => { Heat.reset(); return ['trees cleared']; } },
-    wallpaper: { d: 'wallpaper galaxy|heat', run: a => {
-      if (!['galaxy', 'heat'].includes(a[0])) return [`current: ${OS.wallpaper()}. usage: wallpaper galaxy|heat`];
+    wallpaper: { d: 'wallpaper drive|galaxy|heat', run: a => {
+      if (!['drive', 'galaxy', 'heat'].includes(a[0])) return [`current: ${OS.wallpaper()}. usage: wallpaper drive|galaxy|heat`];
       OS.setWallpaper(a[0]); return [`wallpaper → ${OS.wallpaper()}`];
     } },
     theme: { d: 'theme dark|light|system', run: a => {
@@ -161,7 +162,7 @@
         else if (parts[0] === 'open') pool = Apps.list.map(a => a.id);
         else if (parts[0] === 'cat') pool = [...Object.keys(FS), ...Object.keys(PROJECTS).map(p => 'projects/' + p)];
         else if (parts[0] === 'theme') pool = ['dark', 'light', 'system'];
-        else if (parts[0] === 'wallpaper') pool = ['galaxy', 'heat'];
+        else if (parts[0] === 'wallpaper') pool = ['drive', 'galaxy', 'heat'];
         else pool = [];
         const m = pool.filter(p => p.startsWith(last));
         if (m.length === 1) { parts[parts.length - 1] = m[0]; inp.value = parts.join(' ') + (parts.length === 1 ? ' ' : ''); }
