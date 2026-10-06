@@ -1,49 +1,45 @@
 # AristeaOS
 
-Portfolio of **Aristea Gjokthomi**, a data scientist and ML engineer, built as a desktop that runs in the browser.
+My portfolio, built as a desktop that runs in the browser. I'm Aristea Gjokthomi, a data scientist and ML engineer.
 
-**Live:** https://aristxa.github.io
+Live: https://aristxa.github.io
 
-- The default **wallpaper is [NeuroDrive](https://github.com/Aristxa/neurodrive)**: four self-driving cars touring a city, all driven by one pretrained neural network, running on the real engine.
-- Switch its panel from **Autopilot** to **Drive yourself** to get your own car: WASD/arrows on a keyboard, touch pedals on a phone, `P` to hand the wheel to the neural network, `R` to restart. Manual mode is never remembered, so every visit starts with the calm autopilot tour.
-- Switch it (right-click the desktop or Settings) to the **daedalOS galaxy** (WebGL), which turns slowly and tilts with the mouse, or to a **live toy CoolCity heat map**: hover to cast shade, click to plant a tree, or run the lazy-greedy planner.
-- Drag on the desktop to **rubber-band select** icons, like a real PC.
-- There is **one app per project**, each with an interactive view of its real published results. The Hugging Face Spaces run live inside the windows.
-- It's a real **window manager**: drag, snap to the left/right/top edge, resize, minimize, and maximize by double-clicking the title bar.
-- The **start menu has search** (`Ctrl`/`⌘` + `K`), and right-clicking the desktop opens a context menu.
-- The **terminal** has tab completion and history (`help`, `neofetch`, `plant 40`, `open fiskal`, …).
-- Every app has a **deep link**, e.g. `/#/fiskal`, `/#/coolcity`, `/#/terminal`.
-- It includes light/dark themes, reduced-motion support, and a phone layout where windows open as draggable floating cards.
+Each project has its own app on the desktop, with an interactive view of its published results. The Hugging Face Spaces run live inside their windows.
 
-It's plain HTML, CSS and JavaScript with no framework, no build step and no web fonts (it uses the visitor's OS font).
+The wallpaper is [NeuroDrive](https://github.com/Aristxa/neurodrive): four cars driving around a city, all controlled by the same pretrained network, running on the real engine. Switch the panel to "Drive yourself" to get your own car (WASD or arrows, touch pedals on a phone, `P` for autopilot, `R` to restart). It always starts back on autopilot. From the desktop's right-click menu or Settings you can switch to two other wallpapers: the daedalOS galaxy (WebGL), or a small CoolCity heat map where you can plant trees or run the greedy planner.
 
-The galaxy wallpaper is from [daedalOS](https://github.com/DustinBrett/daedalOS) (MIT) and the animated icons are adapted from [itshover](https://itshover.com) (Apache-2.0). See `THIRD-PARTY-NOTICES.md`.
+The rest works like a normal desktop:
 
-## Structure
+- windows can be dragged, snapped to the edges, resized, minimized and maximized
+- drag on the desktop to select icons, right-click for a context menu
+- start menu with search (`Ctrl`/`⌘` + `K`)
+- a terminal with tab completion and history (`help`, `neofetch`, `plant 40`, `open fiskal`, …)
+- every app has its own link, e.g. `/#/fiskal`, `/#/coolcity`, `/#/terminal`
+- light and dark themes, reduced motion, and a phone layout with floating windows
+
+Plain HTML, CSS and JavaScript: no framework, no build step, and the system font instead of web fonts.
+
+The galaxy wallpaper comes from [daedalOS](https://github.com/DustinBrett/daedalOS) (MIT) and the animated icons are adapted from [itshover](https://itshover.com) (Apache-2.0). See `THIRD-PARTY-NOTICES.md`.
+
+## Files
 
 ```
-index.html        shell markup (boot screen, desktop, taskbar, start menu)
-css/style.css     all styles and theme tokens
-js/drive.js       default wallpaper: NeuroDrive cars on js/vendor/neurodrive.js
-js/galaxy.js      optional wallpaper: wrapper around js/vendor/daedalos-galaxy.js
-js/heat.js        optional wallpaper: heat-field simulation + greedy planner
-js/apps.js        icons, app registry and every app's content
+index.html        boot screen, desktop, taskbar, start menu
+css/style.css     styles and theme tokens
+js/drive.js       NeuroDrive wallpaper (uses js/vendor/neurodrive.js)
+js/galaxy.js      galaxy wallpaper (wraps js/vendor/daedalos-galaxy.js)
+js/heat.js        heat map wallpaper and greedy planner
+js/apps.js        icons, app registry and the content of every app
 js/terminal.js    terminal commands
-js/wm.js          window manager (drag, snap, resize, taskbar)
+js/wm.js          window manager
 js/main.js        boot, desktop, start menu, context menu, routing, CONFIG
 ```
 
-## Edit
+Contact details are in `CONFIG` at the top of `js/main.js`, desktop icons in the `DESKTOP` array there, and all app content in `js/apps.js`. After changing CSS or JS, bump the `?v=` number on the tags in `index.html` so phones don't keep old cached files.
 
-- **Contact details:** set `email` / `linkedin` in the `CONFIG` object at the top of `js/main.js`.
-- **About text:** the `text` array in `mountAbout` in `js/apps.js`. It's written in first person, so make it sound like you.
-- **Projects and text:** everything lives in `js/apps.js`, one `mount…` function per app.
-- **Desktop icons:** the `DESKTOP` array in `js/main.js`.
-- **After changing CSS/JS:** bump the `?v=` number on the `<link>`/`<script>` tags in `index.html`, so phones don't keep serving old cached files.
+## Updating the NeuroDrive engine
 
-## Update the NeuroDrive engine
-
-`js/vendor/neurodrive.js` is the engine from the `neurodrive` repo, concatenated into one closure. After changing that repo (for example retraining the brains), rebuild it from a checkout next to this folder:
+`js/vendor/neurodrive.js` is the engine from the `neurodrive` repo, bundled into one file. To rebuild it from a checkout next to this folder:
 
 ```bash
 N=../neurodrive
@@ -55,16 +51,11 @@ N=../neurodrive
   echo "})();"; } > js/vendor/neurodrive.js
 ```
 
-## Run locally
+## Running locally
 
 ```bash
 npx http-server -p 5173 -c-1
-# open http://localhost:5173
+# http://localhost:5173
 ```
 
-## Deploy (free, GitHub Pages)
-
-1. Create a **public** repo named exactly `Aristxa.github.io`.
-2. Push this folder to its `main` branch.
-3. In the repo, go to **Settings → Pages → Build and deployment**, choose *Deploy from a branch*, then `main` / `root`.
-4. After about a minute, the site is live at https://aristxa.github.io.
+It's deployed with GitHub Pages from the `main` branch.
